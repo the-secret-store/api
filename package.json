@@ -1,12 +1,10 @@
 {
-	"name": "my-app-backend",
+	"name": "the-secret-store-api",
 	"version": "0.0.1",
-	"description": "This is the backend for my-app",
+	"description": "This is the API of The Secret Store",
 	"main": "build/server.js",
 	"module": "src/server.js",
-	"requiredVariables": [
-		"SAMPLE"
-	],
+	"requiredVariables": [],
 	"scripts": {
 		"build": "babel src --out-dir build",
 		"dev": "nodemon --exec babel-node src/server.js --ignore jsconfig.json",
