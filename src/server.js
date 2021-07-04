@@ -4,6 +4,7 @@ import config from 'config';
 
 import {
 	checkEnv,
+	connectDB,
 	registerListener,
 	registerLogging,
 	registerPreprocessor,
@@ -22,3 +23,4 @@ registerPreprocessor(app);
 setupDocs(app);
 registerRouters(app);
 registerListener(app, PORT, HOST);
+connectDB();

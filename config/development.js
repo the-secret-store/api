@@ -1,4 +1,5 @@
 module.exports = {
 	loggingLevel: 'silly',
-	logRequests: true
+	logRequests: true,
+	db_uri: 'mongodb://localhost:27017/tss-test'
 };
