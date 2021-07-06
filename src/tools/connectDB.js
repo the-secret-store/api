@@ -3,6 +3,10 @@ import config from 'config';
 import chalk from 'chalk';
 import logger from '@tools/logging';
 
+/**
+ * Connects to the mongo DB server
+ */
+
 export default async function connectDB() {
 	const DB_URI = config.get('db_uri');
 	const options = {
@@ -18,6 +22,7 @@ export default async function connectDB() {
 		logger.info(`DB connection ${chalk.greenBright('successful')}`);
 	} catch (exp) {
 		logger.info(`DB connection ${chalk.red('failed')}`);
-		throw exp;
+		logger.error(exp.stack);
+		process.exit(1);
 	}
 }
