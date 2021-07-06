@@ -1,3 +1,4 @@
+import Joi from 'joi';
 import { model, Schema, Types } from 'mongoose';
 
 const UserSchema = new Schema(
@@ -12,3 +13,22 @@ const UserSchema = new Schema(
 );
 
 export default model('user', UserSchema);
+
+/**
+ * Validates User object
+ *
+ * @param {*} userObject
+ * @returns Joi validator
+ */
+
+export const validateUser = userObject => {
+	const schema = Joi.object({
+		displayName: Joi.string().required(),
+		email: Joi.string()
+			.email({ tlds: { allow: false } })
+			.required(),
+		password: Joi.string().required
+	});
+
+	return schema.validate(userObject);
+};

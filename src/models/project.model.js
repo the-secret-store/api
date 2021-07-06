@@ -1,3 +1,4 @@
+import Joi from 'joi';
 import { model, Schema, Types } from 'mongoose';
 
 const ProjectSchema = new Schema(
@@ -10,3 +11,19 @@ const ProjectSchema = new Schema(
 );
 
 export default model('project', ProjectSchema);
+
+/**
+ * Validates Project object
+ *
+ * @param {*} projectObject
+ * @returns Joi validator
+ */
+
+export const validateProject = projectObject => {
+	const schema = Joi.object({
+		projectName: Joi.string().required(),
+		owner: Joi.required()
+	});
+
+	return schema.validate(projectObject);
+};

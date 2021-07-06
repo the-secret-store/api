@@ -1,3 +1,4 @@
+import Joi from 'joi';
 import { model, Schema, Types } from 'mongoose';
 
 const TeamSchema = new Schema(
@@ -10,3 +11,18 @@ const TeamSchema = new Schema(
 );
 
 export default model('team', TeamSchema);
+
+/**
+ * Validates Team object
+ *
+ * @param {*} teamObject
+ * @returns Joi validator
+ */
+
+export const validateTeam = teamObject => {
+	const schema = Joi.object({
+		teamName: Joi.string().required()
+	});
+
+	return schema.validate(teamObject);
+};
