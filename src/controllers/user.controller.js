@@ -1,6 +1,6 @@
 import logger from '@tools/logging';
 import { StatusCodes } from 'http-status-codes';
-import User, { validateUser } from 'src/models/user.model';
+import { User, validateUser } from '@models';
 
 /**
  * Controller for /user
