@@ -1,5 +1,6 @@
 import logger from '@tools/logging';
 import { StatusCodes } from 'http-status-codes';
+import bcryptjs from 'bcryptjs';
 import { User, validateUser } from '@models';
 
 /**
@@ -27,7 +28,10 @@ export const registerUser = async (req, res) => {
 				.status(StatusCodes.BAD_REQUEST)
 				.json({ message: error.details[0].message, details: error });
 		}
-		const theNewUser = new User(body);
+
+		const salt = await bcryptjs.genSalt(5);
+		const hashed = await bcryptjs.hash(body.password, salt);
+		const theNewUser = new User({ ...body, password: hashed });
 		const userDoc = await theNewUser.save();
 
 		logger.debug('Registration successful.');
