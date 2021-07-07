@@ -4,7 +4,7 @@ import { model, Schema, Types } from 'mongoose';
 const UserSchema = new Schema(
 	{
 		displayName: { type: String, required: true, trim: true },
-		email: { type: String, required: true },
+		email: { type: String, required: true, unique: true },
 		password: { type: String, required: true },
 		teams: { type: [{ type: Types.ObjectId, ref: 'team' }] },
 		projects: { type: [{ type: Types.ObjectId, ref: 'project' }] }
