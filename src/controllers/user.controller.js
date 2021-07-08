@@ -14,6 +14,8 @@ import { User, validateUser } from '@models';
  *
  * @route: /user/register
  * @method: POST
+ * @requires: body { displayName, email, password, teams?, projects? }
+ * @returns: 200 | 400 | 500
  */
 
 export const registerUser = async (req, res) => {
@@ -41,7 +43,7 @@ export const registerUser = async (req, res) => {
 			const errorKeys = Object.keys(err.keyPattern);
 			return res
 				.status(StatusCodes.BAD_REQUEST)
-				.json({ message: `${body[errorKeys[0]]} is already registered`, error: err });
+				.json({ message: `${body[errorKeys[0]]} is already registered`, details: err });
 		}
 		if (err.name === 'ValidationError') {
 			logger.debug(err);
@@ -53,6 +55,6 @@ export const registerUser = async (req, res) => {
 		logger.error(err.stack);
 		return res
 			.status(StatusCodes.INTERNAL_SERVER_ERROR)
-			.json({ message: 'Could not complete registration', error: err });
+			.json({ message: 'Could not complete registration', details: err });
 	}
 };
