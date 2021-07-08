@@ -34,7 +34,10 @@ export const registerUser = async (req, res) => {
 		const salt = await bcryptjs.genSalt(5);
 		const hashed = await bcryptjs.hash(body.password, salt);
 		const theNewUser = new User({ ...body, password: hashed });
-		const userDoc = await theNewUser.save();
+		const {
+			// eslint-disable-next-line no-unused-vars
+			_doc: { password, __v, ...userDoc }
+		} = await theNewUser.save();
 
 		logger.debug('Registration successful.');
 		return res.status(StatusCodes.OK).json({ message: 'Successfully registered', data: userDoc });
