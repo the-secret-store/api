@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import PasswordComplexity from 'joi-password-complexity';
 import { model, Schema, Types } from 'mongoose';
 
 const UserSchema = new Schema(
@@ -24,11 +25,19 @@ export default model('user', UserSchema);
 
 export const validateUser = userObject => {
 	const schema = Joi.object({
-		display_name: Joi.string().required(),
+		display_name: Joi.string().min(3).required(),
 		email: Joi.string()
 			.email({ tlds: { allow: false } })
 			.required(),
-		password: Joi.string().required()
+		password: new PasswordComplexity({
+			min: 6,
+			max: 18,
+			lowerCase: 1,
+			upperCase: 1,
+			numeric: 1,
+			symbol: 1,
+			requirementCount: 4
+		})
 	});
 
 	return schema.validate(userObject);
