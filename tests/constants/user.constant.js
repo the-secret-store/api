@@ -1,11 +1,11 @@
 export const validUserObject1 = {
-	display_name: 'A',
+	display_name: 'ABC',
 	email: 'a@email.com',
-	password: 'password'
+	password: 'Password1!'
 };
 
 export const validUserObject2 = {
-	display_name: 'B',
+	display_name: 'XYZ',
 	email: 'b@email.com',
-	password: 'password'
+	password: 'Password1!'
 };
