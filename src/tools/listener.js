@@ -19,4 +19,6 @@ export default function registerListener(app, PORT, HOST) {
 		logger.info(`Listening for requests at ${chalk.cyan(`http://${address}:${port}`)}`);
 		logger.info(`Logging level set to: ${chalk.blue(logger.level)}`);
 	});
+
+	return server;
 }

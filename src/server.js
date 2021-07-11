@@ -22,5 +22,7 @@ checkEnv();
 registerPreprocessor(app);
 setupDocs(app);
 registerRouters(app);
-registerListener(app, PORT, HOST);
 connectDB();
+
+const server = registerListener(app, PORT, HOST);
+module.exports = server;
