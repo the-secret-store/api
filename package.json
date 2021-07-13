@@ -4,6 +4,7 @@
 	"description": "This is the API of The Secret Store",
 	"main": "build/server.js",
 	"module": "src/server.js",
+	"repository": "https://github.com/KrishnaMoorthy12/the-secret-store-api",
 	"requiredVariables": [],
 	"scripts": {
 		"build": "babel src --out-dir build",
