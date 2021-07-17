@@ -9,5 +9,6 @@
 module.exports = {
 	host: 'HOST',
 	port: 'PORT',
+	secretKey: 'SECRET_KEY',
 	logRequests: 'VERBOSE_REQ_LOGGING'
 };

@@ -5,7 +5,9 @@
 	"main": "build/server.js",
 	"module": "src/server.js",
 	"repository": "https://github.com/KrishnaMoorthy12/the-secret-store-api",
-	"requiredVariables": [],
+	"requiredVariables": [
+		"SECRET_KEY"
+	],
 	"scripts": {
 		"build": "babel src --out-dir build",
 		"dev": "nodemon --exec babel-node src/server.js --ignore jsconfig.json",

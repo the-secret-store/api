@@ -1,12 +1,13 @@
 import 'express-async-errors';
 import { StatusCodes } from 'http-status-codes';
-import { PingRouter, UserRouter } from '@routers';
+import { AuthRouter, PingRouter, UserRouter } from '@routers';
 
 /**
  * Registers all routes and handles server errors.
  */
 
 export default function registerRouters(app) {
+	app.use('/auth', AuthRouter);
 	app.use('/ping', PingRouter);
 	app.use('/user', UserRouter);
 
