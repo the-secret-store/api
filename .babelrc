@@ -14,7 +14,7 @@
 					"@models": "./src/models",
 					"@routers": "./src/routers",
 					"@tools": "./src/tools",
-					"@validation": "./validation/tools"
+					"@validation": "./src/validation"
 				}
 			}
 		],
