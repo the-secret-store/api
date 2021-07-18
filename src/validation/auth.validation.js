@@ -3,7 +3,9 @@ import PasswordComplexity from 'joi-password-complexity';
 
 export default function validateAuthRequest(requestBody) {
 	const schema = Joi.object({
-		email: Joi.email({ tlds: { allow: false } }).required(),
+		email: Joi.string()
+			.email({ tlds: { allow: false } })
+			.required(),
 		password: new PasswordComplexity({
 			min: 6,
 			max: 18,
