@@ -13,7 +13,8 @@
 					"@middlewares": "./src/middlewares",
 					"@models": "./src/models",
 					"@routers": "./src/routers",
-					"@tools": "./src/tools"
+					"@tools": "./src/tools",
+					"@validation": "./validation/tools"
 				}
 			}
 		],

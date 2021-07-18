@@ -8,11 +8,13 @@
 			"@models/*": ["src/models/"],
 			"@routers/*": ["src/routers/"],
 			"@tools/*": ["src/tools/*"],
+			"@validation/*": ["src/validation/*"],
 			"@controllers": ["src/controllers"],
 			"@middlewares": ["src/middlewares"],
 			"@models": ["src/models"],
 			"@routers": ["src/routers"],
-			"@tools": ["src/tools"]
+			"@tools": ["src/tools"],
+			"@validation": ["src/validation"]
 		}
 	},
 	"include": ["src"],
