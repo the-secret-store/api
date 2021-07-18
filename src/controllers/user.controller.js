@@ -55,9 +55,6 @@ export const registerUser = async (req, res) => {
 				.json({ message: err.message, details: err.errors });
 		}
 
-		logger.error(err.stack);
-		return res
-			.status(StatusCodes.INTERNAL_SERVER_ERROR)
-			.json({ message: 'Could not complete registration', details: err });
+		throw err;
 	}
 };
