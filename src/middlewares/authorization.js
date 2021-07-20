@@ -11,7 +11,7 @@ function obtainTokenFromHeader(authHeader) {
 export const authorize = (req, res, next) => {
 	const { authorization } = req.headers;
 	if (!authorization) {
-		return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Missing authorization header' });
+		return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Missing authorization header' });
 	}
 
 	const token = obtainTokenFromHeader(authorization);

@@ -1,4 +1,5 @@
+import authDocs from './auth.docs';
 import pingDocs from './ping.docs';
 import userDocs from './user.docs';
 
-export default { ...pingDocs, ...userDocs };
+export default { ...authDocs, ...pingDocs, ...userDocs };
