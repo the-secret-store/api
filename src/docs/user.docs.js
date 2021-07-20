@@ -11,9 +11,9 @@ export default {
 					description: 'The user object to register',
 					schema: {
 						type: 'object',
-						required: ['displayName', 'email', 'password'],
+						required: ['display_name', 'email', 'password'],
 						properties: {
-							displayName: { type: 'string' },
+							display_name: { type: 'string' },
 							email: { type: 'string' },
 							password: { type: 'string' }
 						}
