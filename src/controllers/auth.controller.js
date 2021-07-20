@@ -52,9 +52,27 @@ export const login = async (req, res) => {
 	}
 
 	// synthesize a token and send it
-	const { id, displayName } = user;
-	const token = jwt.sign({ id, displayName }, TOKEN_PRIVATE_KEY);
+	const { id, display_name } = user;
+	const token = jwt.sign({ id, display_name }, TOKEN_PRIVATE_KEY);
 	return res
-		.status(StatusCodes.ACCEPTED)
+		.status(StatusCodes.OK)
 		.json({ message: 'Authenticated successfully', token, token_type: 'Bearer' });
+};
+
+/**
+ * Check if the user is authorized to perform operations
+ *
+ * @route: /auth/check
+ * @method: POST
+ * @requires: headers {authorization}
+ * @returns: 200 | 401
+ */
+
+export const checkAuth = async (req, res) => {
+	// make sure to use authorize middleware
+	if (req.user) {
+		return res.status(StatusCodes.OK).json({ message: 'Authorized', data: req.user });
+	}
+
+	return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Not authorized' });
 };
