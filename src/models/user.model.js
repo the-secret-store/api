@@ -37,7 +37,7 @@ export const validateUser = userObject => {
 			numeric: 1,
 			symbol: 1,
 			requirementCount: 4
-		})
+		}).required()
 	});
 
 	return schema.validate(userObject);

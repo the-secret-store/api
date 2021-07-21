@@ -14,7 +14,7 @@ export default function validateAuthRequest(requestBody) {
 			numeric: 1,
 			symbol: 1,
 			requirementCount: 4
-		})
+		}).required()
 	});
 
 	return schema.validate(requestBody);
