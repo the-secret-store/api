@@ -5,11 +5,11 @@ import { validUserObject1 } from '../constants/user.constant';
 describe('User router', () => {
 	describe('Registration [POST /register]', () => {
 		let server;
-		beforeEach(() => {
+		beforeEach(async () => {
 			server = require('../../src/server');
+			await User.deleteMany({});
 		});
 		afterEach(async () => {
-			await User.deleteMany({});
 			await server.close();
 		});
 
@@ -20,10 +20,6 @@ describe('User router', () => {
 		it('return 200 for valid user', async () => {
 			const response = await exec(validUserObject1);
 			expect(response.statusCode).toEqual(200);
-
-			if (response.statusCode === 400) {
-				console.log(response.body);
-			}
 		});
 
 		it('return 400 for user validation error', async () => {
