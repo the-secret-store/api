@@ -10,7 +10,7 @@ import validateAuthRequest from '@validation/auth.validation';
 /**
  * Controller for /user
  *
- * Available controllers: registerUser
+ * Available controllers: registerUser, checkAuth
  */
 
 const TOKEN_PRIVATE_KEY = config.get('secretKey');
