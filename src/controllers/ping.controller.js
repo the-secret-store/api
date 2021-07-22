@@ -6,12 +6,11 @@ import { StatusCodes } from 'http-status-codes';
  * Available controllers: testPing
  */
 
+/**
+ * Ping the server
+ * @returns Status `200`
+ */
 export function testPing(_req, res) {
-	/**
-	 * Ping the server
-	 * @param {}
-	 * @returns Status `200`
-	 */
 	res.sendStatus(StatusCodes.OK);
 }
 

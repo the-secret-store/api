@@ -28,7 +28,7 @@ export const login = async (req, res) => {
 	const { email, password } = req.body;
 	logger.debug('Acknowledged: ' + { email, password });
 
-	// check if given credentials meet user validation, if it doesn't, we can avoid db read req
+	// 1. check if given credentials meet user validation, if it doesn't, we can avoid db query
 	const { error } = validateAuthRequest({ email, password });
 	if (error) {
 		logger.debug(JSON.stringify(error));
@@ -37,7 +37,7 @@ export const login = async (req, res) => {
 			.json({ message: error.details[0].message, details: error });
 	}
 
-	// find if the user exist
+	// 2. find if the user exist
 	const user = await User.findOne({ email });
 	if (!user) {
 		return res.status(StatusCodes.UNAUTHORIZED).json({
@@ -45,13 +45,13 @@ export const login = async (req, res) => {
 		});
 	}
 
-	// now compare the given and actual password
+	// 3. now compare the given and actual password
 	const authenticated = await bcrypt.compare(password, user.password);
 	if (!authenticated) {
 		return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Wrong password' });
 	}
 
-	// synthesize a token and send it
+	// 4. synthesize a token and send it
 	const { id, display_name } = user;
 	const token = jwt.sign({ id, display_name }, TOKEN_PRIVATE_KEY);
 	return res
