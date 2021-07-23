@@ -26,7 +26,7 @@ const TOKEN_PRIVATE_KEY = config.get('secretKey');
 
 export const login = async (req, res) => {
 	const { email, password } = req.body;
-	logger.debug('Acknowledged: ' + { email, password });
+	logger.debug('Acknowledged: ' + JSON.stringify({ email, password }));
 
 	// 1. check if given credentials meet user validation, if it doesn't, we can avoid db query
 	const { error } = validateAuthRequest({ email, password });
@@ -53,7 +53,7 @@ export const login = async (req, res) => {
 
 	// 4. synthesize a token and send it
 	const { id, display_name } = user;
-	const token = jwt.sign({ id, display_name }, TOKEN_PRIVATE_KEY);
+	const token = jwt.sign({ id, display_name, email }, TOKEN_PRIVATE_KEY);
 	return res
 		.status(StatusCodes.OK)
 		.json({ message: 'Authenticated successfully', token, token_type: 'Bearer' });
