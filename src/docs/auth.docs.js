@@ -38,6 +38,7 @@ export default {
 				{
 					in: 'header',
 					name: 'JWT',
+					required: true,
 					description: 'The JSON Web Token to authorize',
 					schema: {
 						type: 'string'
