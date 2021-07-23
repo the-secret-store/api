@@ -8,12 +8,14 @@
 			"@models/*": ["src/models/"],
 			"@routers/*": ["src/routers/"],
 			"@tools/*": ["src/tools/*"],
+			"@utilities/*": ["src/utilities/*"],
 			"@validation/*": ["src/validation/*"],
 			"@controllers": ["src/controllers"],
 			"@middlewares": ["src/middlewares"],
 			"@models": ["src/models"],
 			"@routers": ["src/routers"],
 			"@tools": ["src/tools"],
+			"@utilities": ["src/utilities"],
 			"@validation": ["src/validation"]
 		}
 	},
