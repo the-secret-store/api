@@ -18,7 +18,7 @@ function obtainTokenFromHeader(authHeader) {
  * @requires jwt on auth header in BEARER <token> format
  * @mounts user object onto req object
  */
-export const authorize = (req, res, next) => {
+export default (req, res, next) => {
 	const { authorization } = req.headers;
 	if (!authorization) {
 		return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Missing authorization header' });
