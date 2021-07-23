@@ -33,12 +33,12 @@ export const sendOTP = async (req, res) => {
 		res.status(StatusCodes.OK).json({ message: 'Verification code sent successfully' });
 	} catch (err) {
 		// if there was an error, delete the saved otp document
+		logger.error(err.stack);
+		await OTP.deleteOne({ character_id });
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
 			message:
 				'Could not send verification code, this could also be due to an invalid email address'
 		});
-		logger.error(err.stack);
-		OTP.deleteOne({ character_id });
 	}
 };
 
@@ -67,6 +67,6 @@ export const verifyAccount = async (req, res) => {
 
 	// 3. set the account as verified and delete the otp document
 	await User.findByIdAndUpdate(character_id, { $set: { is_verified: true } });
+	await OTP.deleteOne({ character_id });
 	res.status(StatusCodes.OK).json({ message: 'Account verified successfully' });
-	OTP.deleteOne({ character_id });
 };
