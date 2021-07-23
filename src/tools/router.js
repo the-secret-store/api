@@ -1,6 +1,6 @@
 import 'express-async-errors';
 import { StatusCodes } from 'http-status-codes';
-import { AuthRouter, PingRouter, UserRouter } from '@routers';
+import { AuthRouter, PingRouter, UserRouter, VerificationRouter } from '@routers';
 import config from 'config';
 
 /**
@@ -11,6 +11,7 @@ export default function registerRouters(app) {
 	app.use('/auth', AuthRouter);
 	app.use('/ping', PingRouter);
 	app.use('/user', UserRouter);
+	app.use('/verify', VerificationRouter);
 
 	app.use((err, _req, res, next) => {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({

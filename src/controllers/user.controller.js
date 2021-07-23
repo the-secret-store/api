@@ -1,6 +1,6 @@
-import logger from '@tools/logging';
-import { StatusCodes } from 'http-status-codes';
 import bcryptjs from 'bcryptjs';
+import { StatusCodes } from 'http-status-codes';
+import logger from '@tools/logging';
 import { User, validateUser } from '@models';
 
 /**
