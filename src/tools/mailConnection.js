@@ -9,6 +9,9 @@ const transport = createTransport({
 	auth: {
 		user: config.get('smtp_email'),
 		pass: config.get('smtp_password')
+	},
+	tls: {
+		rejectUnauthorized: false
 	}
 });
 
