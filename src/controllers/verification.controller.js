@@ -14,7 +14,13 @@ import { generateOTP, sendMail } from '@utilities';
 
 export const sendOTP = async (req, res) => {
 	// 1. get user details //* use authorization middleware
-	const { id: character_id, email } = req.user;
+	const { id: character_id, email, unverified } = req.user;
+
+	// check for unverified property in auth payload (set only if is_verified is false),
+	// if not present, close request as verified already
+	if (!unverified) {
+		return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Already verified' });
+	}
 
 	// 2. generate otp and save to database (update if already exist)
 	const otp = generateOTP();
@@ -60,8 +66,11 @@ export const verifyAccount = async (req, res) => {
 	if (otp.toString().length !== 6) {
 		return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid verification code' });
 	}
-	const result = await OTP.findOne({ character_id, otp });
+	const result = await OTP.findOne({ character_id });
 	if (!result) {
+		return res.status(StatusCodes.BAD_REQUEST).json({ message: 'No record found' });
+	}
+	if (result.otp !== otp) {
 		return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid verification code' });
 	}
 

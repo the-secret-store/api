@@ -26,6 +26,6 @@ export const authorize = (req, res, next) => {
 
 	const token = obtainTokenFromHeader(authorization);
 	const payload = jwt.verify(token, TOKEN_PRIVATE_KEY);
-	req.user = payload; // has id, display_name and email
+	req.user = payload; // has id, display_name, email, ? unverified
 	next();
 };

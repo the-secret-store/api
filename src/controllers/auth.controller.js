@@ -52,8 +52,10 @@ export const login = async (req, res) => {
 	}
 
 	// 4. synthesize a token and send it
-	const { id, display_name } = user;
-	const token = jwt.sign({ id, display_name, email }, TOKEN_PRIVATE_KEY);
+	const { id, display_name, is_verified } = user;
+	const payload = { id, display_name };
+	if (!is_verified) payload.unverified = true;
+	const token = jwt.sign(payload, TOKEN_PRIVATE_KEY);
 	return res
 		.status(StatusCodes.OK)
 		.json({ message: 'Authenticated successfully', token, token_type: 'Bearer' });
