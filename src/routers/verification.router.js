@@ -7,9 +7,10 @@ const router = Router();
 /**
  * Router for /verify
  *
- * Available routes: /get-otp
+ * Available routes: /get-otp, /check
  */
 
 router.get('/get-otp', authorize, VerificationController.sendOTP);
+router.post('/check', authorize, VerificationController.verifyAccount);
 
 export default router;

@@ -1,5 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
-import OTP from '@models/otp.model';
+import { OTP, User } from '@models';
 import logger from '@tools/logging';
 import { generateOTP, sendMail } from '@utilities';
 
@@ -9,7 +9,7 @@ import { generateOTP, sendMail } from '@utilities';
  * @route: /verify/get-otp
  * @method: get
  * @requires: header { authorization: 'Bearer <token>' }
- * @returns: 200 | 400 | 500
+ * @returns: 200 | 400 | 401 | 500
  */
 
 export const sendOTP = async (req, res) => {
@@ -32,12 +32,41 @@ export const sendOTP = async (req, res) => {
 		logger.debug('Email sent');
 		res.status(StatusCodes.OK).json({ message: 'Verification code sent successfully' });
 	} catch (err) {
-		logger.error(err.stack);
 		// if there was an error, delete the saved otp document
-		OTP.deleteOne({ character_id });
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
 			message:
 				'Could not send verification code, this could also be due to an invalid email address'
 		});
+		logger.error(err.stack);
+		OTP.deleteOne({ character_id });
 	}
+};
+
+/**
+ * Verify the account with otp
+ *
+ * @route: /verify/check
+ * @method: get
+ * @requires: header { authorization: 'Bearer <token>' }, body { otp }
+ * @returns: 200 | 400 | 500
+ */
+
+export const verifyAccount = async (req, res) => {
+	// 1. get user details and otp //* use authorization middleware
+	const { id: character_id } = req.user;
+	const { otp } = req.body;
+
+	// 2. check the otp
+	if (otp.toString().length !== 6) {
+		return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid verification code' });
+	}
+	const result = await OTP.findOne({ character_id, otp });
+	if (!result) {
+		return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid verification code' });
+	}
+
+	// 3. set the account as verified and delete the otp document
+	await User.findByIdAndUpdate(character_id, { $set: { is_verified: true } });
+	res.status(StatusCodes.OK).json({ message: 'Account verified successfully' });
+	OTP.deleteOne({ character_id });
 };
