@@ -9,7 +9,8 @@ import {
 	registerLogging,
 	registerPreprocessor,
 	registerRouters,
-	setupDocs
+	setupDocs,
+	verifyMailConnection
 } from '@tools';
 
 const PORT = config.get('port');
@@ -23,6 +24,7 @@ registerPreprocessor(app);
 setupDocs(app);
 registerRouters(app);
 connectDB();
+verifyMailConnection();
 
 const server = registerListener(app, PORT, HOST);
 module.exports = server;

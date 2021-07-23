@@ -6,7 +6,9 @@
 	"module": "src/server.js",
 	"repository": "https://github.com/KrishnaMoorthy12/the-secret-store-api",
 	"requiredVariables": [
-		"SECRET_KEY"
+		"SECRET_KEY",
+		"SMTP_EMAIL",
+		"SMTP_PASSWORD"
 	],
 	"scripts": {
 		"build": "babel src --out-dir build",
@@ -36,6 +38,7 @@
 		"jsonwebtoken": "^8.5.1",
 		"mongoose": "^5.13.1",
 		"morgan": "^1.10.0",
+		"nodemailer": "^6.6.3",
 		"swagger-ui-express": "^4.1.6",
 		"winston": "^3.3.3"
 	},
