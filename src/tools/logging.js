@@ -14,6 +14,9 @@ export function registerLogging(app) {
 	if (config.get('logRequests')) app.use(requestLogger);
 }
 
+/**
+ * A customized console transport
+ */
 const prettyConsoleTransport = new transports.Console({
 	format: combine(
 		colorize(),
@@ -28,6 +31,12 @@ const prettyConsoleTransport = new transports.Console({
 	)
 });
 
+/**
+ * Creates file transport
+ * @param {string} filename filepath to log
+ * @param {string} level Logging level
+ * @returns WinstonTransport
+ */
 const fileLogTransport = (filename, level) => {
 	return new transports.File({
 		filename,
@@ -36,9 +45,36 @@ const fileLogTransport = (filename, level) => {
 	});
 };
 
+/**
+ * Get winston configs and transports based on environment
+ * @param {string} environment
+ * @returns {{transports: Array, exceptionHandlers: Array, rejectionHandlers: Array}}
+ */
+const getTransports = environment => {
+	let winstonConfigs = {
+		transports: [prettyConsoleTransport, fileLogTransport('logs/verbose.log', 'verbose')],
+		exceptionHandlers: [prettyConsoleTransport, fileLogTransport('logs/exceptions.log', 'error')],
+		rejectionHandlers: [prettyConsoleTransport, fileLogTransport('logs/rejections.log', 'warn')]
+	};
+
+	switch (environment) {
+		case 'production':
+			return winstonConfigs;
+
+		case 'test':
+			return {};
+
+		case 'development':
+		default:
+			// pop out file transports, log only on console
+			for (const configProp of Object.keys(winstonConfigs)) {
+				winstonConfigs[configProp].pop();
+			}
+			return winstonConfigs;
+	}
+};
+
 export default winston.createLogger({
 	level: config.get('loggingLevel'),
-	transports: [prettyConsoleTransport, fileLogTransport('logs/verbose.log', 'verbose')],
-	exceptionHandlers: [prettyConsoleTransport, fileLogTransport('logs/exceptions.log', 'error')],
-	rejectionHandlers: [prettyConsoleTransport, fileLogTransport('logs/rejections.log', 'warn')]
+	...getTransports(config.util.getEnv('NODE_ENV'))
 });
