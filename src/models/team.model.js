@@ -4,6 +4,7 @@ import { model, Schema, Types } from 'mongoose';
 const TeamSchema = new Schema(
 	{
 		team_name: { type: String, required: true, trim: true },
+		owner: { type: Types.ObjectId, ref: 'user' },
 		members: { type: [{ type: Types.ObjectId, ref: 'user' }] },
 		projects: { type: [{ type: Types.ObjectId, ref: 'project' }] }
 	},
@@ -15,13 +16,14 @@ export default model('team', TeamSchema);
 /**
  * Validates Team object
  *
- * @param {*} teamObject
+ * @param {{team_name: string, owner: string}} teamObject
  * @returns Joi validator
  */
 
 export const validateTeam = teamObject => {
 	const schema = Joi.object({
-		teamName: Joi.string().required()
+		team_name: Joi.string().required(),
+		owner: Joi.string().required()
 	});
 
 	return schema.validate(teamObject);
