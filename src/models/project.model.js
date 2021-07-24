@@ -1,11 +1,15 @@
 import Joi from 'joi';
-import { model, Schema, Types } from 'mongoose';
+import { model, Schema } from 'mongoose';
+import { generateRandomName } from '@utilities';
 
 const ProjectSchema = new Schema(
 	{
-		projectName: { type: String, required: true },
-		secrets: { type: String }, // todo: change to map or something [OR] add a preprocess (obj.stringify)
-		owner: { type: Types.ObjectId, required: true } // think a bit..? how to co-work in projects?
+		project_name: { type: String, required: true, trim: true },
+		app_id: { type: String, default: generateRandomName, unique: true },
+		scope: { type: String, enum: ['user', 'team', 'public'], required: true },
+		secrets: { type: Schema.Types.Mixed },
+		owner: { type: Schema.Types.ObjectId, required: true, refPath: 'ownerModel' },
+		ownerModel: { type: String, required: true, enums: ['user', 'team'] }
 	},
 	{ timestamps: true }
 );
