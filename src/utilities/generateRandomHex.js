@@ -1,6 +1,6 @@
 /**
  * Generates a random Hexadecimal number
- * @param {number} size : string length;
+ * @param {number} size Required string length;
  * @returns {string} Hex string
  */
 

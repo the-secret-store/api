@@ -1,6 +1,11 @@
 import Joi from 'joi';
 import PasswordComplexity from 'joi-password-complexity';
 
+/**
+ * Validates login credentials
+ * @param {{email: string, password: string}} requestBody
+ * @returns Joi validator
+ */
 export default function validateAuthRequest(requestBody) {
 	const schema = Joi.object({
 		email: Joi.string()

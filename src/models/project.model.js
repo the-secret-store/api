@@ -19,14 +19,15 @@ export default model('project', ProjectSchema);
 /**
  * Validates Project object
  *
- * @param {*} projectObject
+ * @param {{project_name: string, owner: string, scope: string}} projectObject
  * @returns Joi validator
  */
 
 export const validateProject = projectObject => {
 	const schema = Joi.object({
-		projectName: Joi.string().required(),
-		owner: Joi.required()
+		project_name: Joi.string().required(),
+		owner: Joi.string().required(),
+		scope: Joi.string().required()
 	});
 
 	return schema.validate(projectObject);

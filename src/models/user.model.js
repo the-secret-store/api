@@ -19,7 +19,7 @@ export default model('user', UserSchema);
 /**
  * Validates User object
  *
- * @param {*} userObject
+ * @param {{display_name: string, email: string, password: string}} userObject
  * @returns Joi validator
  */
 
