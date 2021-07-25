@@ -1,2 +1,3 @@
+export { validateUser } from '@models/user.model';
 export { default as validateAuthRequest } from './auth.validation';
-export { validateUser } from '@models/user';
+export { default as validateProjectPostRequest } from './project.validation';

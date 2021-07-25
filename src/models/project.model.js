@@ -7,9 +7,9 @@ const ProjectSchema = new Schema(
 		project_name: { type: String, required: true, trim: true },
 		app_id: { type: String, default: generateRandomName, unique: true },
 		scope: { type: String, enum: ['user', 'team', 'public'], required: true },
-		secrets: { type: Schema.Types.Mixed },
+		secrets: { type: Schema.Types.Mixed, default: {} },
 		owner: { type: Schema.Types.ObjectId, required: true, refPath: 'ownerModel' },
-		ownerModel: { type: String, required: true, enums: ['user', 'team'] }
+		ownerModel: { type: String, enums: ['user', 'team'] }
 	},
 	{ timestamps: true }
 );

@@ -1,6 +1,6 @@
 import 'express-async-errors';
 import { StatusCodes } from 'http-status-codes';
-import { AuthRouter, PingRouter, UserRouter, VerificationRouter } from '@routers';
+import { AuthRouter, PingRouter, ProjectRouter, UserRouter, VerificationRouter } from '@routers';
 import config from 'config';
 
 /**
@@ -10,6 +10,7 @@ import config from 'config';
 export default function registerRouters(app) {
 	app.use('/auth', AuthRouter);
 	app.use('/ping', PingRouter);
+	app.use('/project', ProjectRouter);
 	app.use('/user', UserRouter);
 	app.use('/verify', VerificationRouter);
 
