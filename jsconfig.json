@@ -4,6 +4,8 @@
 		"paths": {
 			"@/*": ["src/"],
 			"@controllers/*": ["src/controllers/"],
+			"@docs/*": ["src/docs/"],
+			"@functions/*": ["src/functions/"],
 			"@middlewares/*": ["src/middlewares/"],
 			"@models/*": ["src/models/"],
 			"@routers/*": ["src/routers/"],
@@ -11,6 +13,8 @@
 			"@utilities/*": ["src/utilities/*"],
 			"@validation/*": ["src/validation/*"],
 			"@controllers": ["src/controllers"],
+			"@docs": ["src/docs"],
+			"@functions": ["src/functions"],
 			"@middlewares": ["src/middlewares"],
 			"@models": ["src/models"],
 			"@routers": ["src/routers"],
