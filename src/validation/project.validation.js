@@ -6,11 +6,11 @@ import Joi from 'joi';
  * @param {object} secrets
  * @returns Joi validator
  */
-export default function validateProjectPostRequest(app_id, secrets) {
+export default function validateProjectPostRequest(projectId, secrets) {
 	const schema = Joi.object({
-		app_id: Joi.string().required(),
+		projectId: Joi.string().required(),
 		secrets: Joi.object().required()
 	});
 
-	return schema.validate({ app_id, secrets });
+	return schema.validate({ projectId, secrets });
 }
