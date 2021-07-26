@@ -2,6 +2,7 @@ import bcryptjs from 'bcryptjs';
 import { StatusCodes } from 'http-status-codes';
 import logger from '@tools/logging';
 import { User, validateUser } from '@models';
+import { prettyJson } from '@utilities';
 
 /**
  * Controller for /user
@@ -20,13 +21,13 @@ import { User, validateUser } from '@models';
 
 export const registerUser = async (req, res) => {
 	const { body } = req;
-	logger.debug('Acknowledged: ' + JSON.stringify(body));
+	logger.debug('Acknowledged: ' + prettyJson(body));
 
 	try {
 		// 1. validate the user object
 		const { error } = validateUser(body);
 		if (error) {
-			logger.debug(JSON.stringify(error));
+			logger.debug(prettyJson(error));
 			return res
 				.status(StatusCodes.BAD_REQUEST)
 				.json({ message: error.details[0].message, details: error });

@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import config from 'config';
 import { StatusCodes } from 'http-status-codes';
 import logger from '@tools/logging';
+import { prettyJson } from '@utilities';
 
 const TOKEN_PRIVATE_KEY = config.get('secretKey');
 
@@ -27,7 +28,7 @@ export default (req, res, next) => {
 
 	const token = obtainTokenFromHeader(authorization);
 	const payload = jwt.verify(token, TOKEN_PRIVATE_KEY);
-	logger.debug(JSON.stringify(payload));
+	logger.debug(prettyJson(payload));
 	req.user = payload; // has id, display_name, email, ? unverified
 	next();
 };
