@@ -2,6 +2,7 @@ import { StatusCodes } from 'http-status-codes';
 import logger from '@tools/logging';
 import { validateProjectPostRequest } from '@validation';
 import { Project, Team, User, validateProject } from '@models';
+import { prettyJson } from '@utilities';
 
 /**
  *
@@ -12,7 +13,7 @@ import { Project, Team, User, validateProject } from '@models';
 export const createProject = async (req, res) => {
 	const { project_name, scope, owner, secrets } = req.body;
 	const projectAttrs = { project_name, scope, owner, secrets };
-	logger.debug('Acknowledged' + JSON.stringify(projectAttrs));
+	logger.debug('Acknowledged: ' + prettyJson(projectAttrs));
 
 	// 1. validate the request
 	const { errors } = validateProject(projectAttrs);
