@@ -5,10 +5,9 @@ import { Project, Team, User, validateProject } from '@models';
 import { prettyJson } from '@utilities';
 
 /**
- *
+ * Controller for /project/create
  * @param {*} req
  * @param {*} res
- * @returns
  */
 export const createProject = async (req, res) => {
 	const { project_name, scope, owner, secrets } = req.body;
@@ -24,7 +23,8 @@ export const createProject = async (req, res) => {
 	}
 
 	// 2i check if the owner is a valid team/ user
-	if (!(await User.findById(owner)) || (await Team.findById(owner))) {
+	const projectOwner = (await User.findById(owner)) || (await Team.findById(owner));
+	if (!projectOwner) {
 		return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid owner id' });
 	}
 
@@ -36,12 +36,16 @@ export const createProject = async (req, res) => {
 	// todo: 3. hash, make the secrets string or something
 
 	try {
-		// 4. create the project
+		// 4i. create the project
 		const theNewProject = new Project(projectAttrs);
 		const {
 			_doc: { _id, app_id }
 		} = await theNewProject.save();
 		logger.debug('Project created successfully');
+
+		// 4ii. add the project to owner's list of projects
+		projectOwner.projects.push(_id);
+		projectOwner.save();
 
 		// 5. return the created project ids
 		return res
@@ -56,7 +60,7 @@ export const createProject = async (req, res) => {
 			});
 		}
 
-		// Probably some other error (i don't remember)
+		// Other mongo errors
 		if (error.name === 'ValidationError') {
 			logger.debug(error);
 			return res
