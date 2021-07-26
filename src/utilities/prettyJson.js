@@ -4,5 +4,5 @@
  * @returns {string} formatted string representation
  */
 export default function prettyJson(jsonObject) {
-	JSON.stringify(jsonObject, null, '\t');
+	return JSON.stringify(jsonObject, null, '\t');
 }
