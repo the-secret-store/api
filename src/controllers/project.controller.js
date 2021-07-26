@@ -5,9 +5,13 @@ import { Project, Team, User, validateProject } from '@models';
 import { prettyJson } from '@utilities';
 
 /**
+ * Controller for /project
+ *
+ * Available controllers: createProject, postSecrets, fetchSecrets
+ */
+
+/**
  * Controller for /project/create
- * @param {*} req
- * @param {*} res
  */
 export const createProject = async (req, res) => {
 	const { project_name, scope, owner, secrets } = req.body;
@@ -77,6 +81,7 @@ export const createProject = async (req, res) => {
  * Controller for /project/:projectId/post
  */
 export const postSecrets = async (req, res) => {
+	//* use authorization, verifiedUsersOnly and privilegedUsersOnly middlewares
 	const { secrets } = req.body;
 	const { projectId } = req.params;
 
@@ -121,4 +126,17 @@ export const postSecrets = async (req, res) => {
 
 		throw error;
 	}
+};
+
+/**
+ * Controller for /post/:projectId/fetch
+ */
+export const fetchSecrets = async (req, res) => {
+	//* use authorization, verifiedUsersOnly and privilegedUsersOnly middlewares
+	const {
+		_doc: { app_id, secrets, backup }
+	} = await Project.findById(req.params.projectId);
+
+	// todo: decrypt
+	res.status(StatusCodes.OK).json({ message: 'Fetched', data: { app_id, secrets, backup } });
 };

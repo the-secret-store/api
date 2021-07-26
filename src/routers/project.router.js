@@ -20,4 +20,12 @@ router.post(
 	ProjectController.postSecrets
 );
 
+router.get(
+	'/:projectId/fetch',
+	authorize,
+	verifiedUsersOnly,
+	privilegedUsersOnly,
+	ProjectController.fetchSecrets
+);
+
 export default router;
