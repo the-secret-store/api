@@ -1,4 +1,5 @@
 import { Project, Team, User } from '@models';
+import logger from '@tools/logging';
 
 /**
  * Find and return Project owner document using projectId (_id)
@@ -6,6 +7,7 @@ import { Project, Team, User } from '@models';
  * @returns {object} Project owner document
  */
 export default async function findOwnerByProjectId(projectId) {
-	const projectOwnerId = (await Project.findOne({ _id: projectId })).owner;
-	return (await User.findById(projectOwnerId)) || Team.findById(projectOwnerId);
+	const projectOwnerId = (await Project.findById(projectId)).owner;
+	logger.debug('Project owner id: ' + projectOwnerId);
+	return (await User.findById(projectOwnerId)) || (await Team.findById(projectOwnerId));
 }
