@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 import logger from '@tools/logging';
 import { validateProjectPostRequest } from '@validation';
-import Project, { validateProject } from '@models/project.model';
+import { Project, Team, User, validateProject } from '@models';
 
 /**
  *
@@ -21,17 +21,30 @@ export const createProject = async (req, res) => {
 			.json({ message: errors.details[0].message, details: errors });
 	}
 
-	// todo: hash, make the secrets string or something
+	// 2i check if the owner is a valid team/ user
+	let ownerOfTheProject =
+		(await User.findOne({ _id: owner })) || (await Team.findOne({ _id: owner }));
+	if (!ownerOfTheProject) {
+		return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid owner id' });
+	}
+
+	// 2ii. check if the project already exists
+	const project = await Project.findOne({ project_name, owner });
+	if (project) {
+		return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Project already exists' });
+	}
+
+	// todo: 3. hash, make the secrets string or something
 
 	try {
-		// 2. create the project
+		// 4. create the project
 		const theNewProject = new Project(projectAttrs);
 		const {
 			_doc: { _id, app_id }
 		} = await theNewProject.save();
 		logger.debug('Project created successfully');
 
-		// 3. return the created project ids
+		// 5. return the created project ids
 		return res
 			.status(StatusCodes.CREATED)
 			.json({ message: 'Project created successfully', data: { id: _id, app_id } });
