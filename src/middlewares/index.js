@@ -1,4 +1,3 @@
-export { default as authorize } from './authorization';
+export * from './auth';
 export { default as rateLimiter } from './rateLimiter';
 export { default as requestLogger } from './requestLogger';
-export { default as verifiedUsersOnly } from './verifiedUsersOnly';
