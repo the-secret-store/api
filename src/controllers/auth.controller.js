@@ -6,6 +6,7 @@ import jwt from 'jsonwebtoken';
 import User from '@models/user.model';
 import logger from '@tools/logging';
 import validateAuthRequest from '@validation/auth.validation';
+import { prettyJson } from '@utilities';
 
 /**
  * Controller for /user
@@ -26,12 +27,12 @@ const TOKEN_PRIVATE_KEY = config.get('secretKey');
 
 export const login = async (req, res) => {
 	const { email, password } = req.body;
-	logger.debug('Acknowledged: ' + JSON.stringify({ email, password }));
+	logger.debug('Acknowledged: ' + prettyJson({ email, password }));
 
 	// 1. check if given credentials meet user validation, if it doesn't, we can avoid db query
 	const { error } = validateAuthRequest({ email, password });
 	if (error) {
-		logger.debug(JSON.stringify(error));
+		logger.debug(prettyJson(error));
 		return res
 			.status(StatusCodes.BAD_REQUEST)
 			.json({ message: error.details[0].message, details: error });
