@@ -12,6 +12,7 @@ import { Project, Team, User, validateProject } from '@models';
 export const createProject = async (req, res) => {
 	const { project_name, scope, owner, secrets } = req.body;
 	const projectAttrs = { project_name, scope, owner, secrets };
+	logger.debug('Acknowledged' + JSON.stringify(projectAttrs));
 
 	// 1. validate the request
 	const { errors } = validateProject(projectAttrs);
@@ -22,15 +23,12 @@ export const createProject = async (req, res) => {
 	}
 
 	// 2i check if the owner is a valid team/ user
-	let ownerOfTheProject =
-		(await User.findOne({ _id: owner })) || (await Team.findOne({ _id: owner }));
-	if (!ownerOfTheProject) {
+	if (!(await User.findById(owner)) || (await Team.findById(owner))) {
 		return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid owner id' });
 	}
 
 	// 2ii. check if the project already exists
-	const project = await Project.findOne({ project_name, owner });
-	if (project) {
+	if (await Project.findOne({ project_name, owner })) {
 		return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Project already exists' });
 	}
 
