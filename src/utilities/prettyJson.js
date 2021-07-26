@@ -4,5 +4,7 @@
  * @returns {string} formatted string representation
  */
 export default function prettyJson(jsonObject) {
-	return JSON.stringify(jsonObject, null, '\t');
+	return JSON.stringify(jsonObject, null, '\t')
+		.replaceAll(/(?<!\\)"/g, '')
+		.replaceAll(/\\(?!!")/g, '');
 }
