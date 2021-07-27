@@ -1,4 +1,7 @@
+import config from 'config';
+import logger from '@tools/logging';
 import { mailer } from '@tools';
+import { prettyJson } from '@utilities';
 
 /**
  * Sends email using the nodemailer transport
@@ -15,6 +18,8 @@ export default function sendMail(to, subject, body) {
 		text: body
 	};
 
-	// send mail with defined transport object
-	return mailer.sendMail(mailOptions);
+	logger.debug('Email: ' + prettyJson(mailOptions));
+
+	// send mail with defined transport object on based on config
+	if (config.get('sendEmails')) return mailer.sendMail(mailOptions);
 }
