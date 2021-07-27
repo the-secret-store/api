@@ -1,4 +1,3 @@
-import { Types } from 'mongoose';
 import { StatusCodes } from 'http-status-codes';
 import logger from '@tools/logging';
 import { validateProjectPostRequest } from '@validation';
@@ -101,9 +100,9 @@ export const postSecrets = async (req, res) => {
 
 	// 3. post the secrets
 	try {
-		const project = await Project.findOne({
-			$or: [{ _id: new Types.ObjectId(projectIdOrAppId) }, { app_id: projectIdOrAppId }]
-		});
+		const project = await (projectIdOrAppId.includes('-')
+			? Project.findOne({ app_id: projectIdOrAppId })
+			: Project.findById(projectIdOrAppId));
 		if (JSON.stringify(project.secrets) === JSON.stringify(secrets)) {
 			return res
 				.status(StatusCodes.OK)
@@ -139,9 +138,9 @@ export const fetchSecrets = async (req, res) => {
 	const { projectIdOrAppId } = req.params;
 	const {
 		_doc: { app_id, secrets, backup }
-	} = await Project.findOne({
-		$or: [{ _id: new Types.ObjectId(projectIdOrAppId) }, { app_id: projectIdOrAppId }]
-	});
+	} = await (projectIdOrAppId.includes('-')
+		? Project.findOne({ app_id: projectIdOrAppId })
+		: Project.findById(projectIdOrAppId));
 
 	// todo: decrypt
 	res.status(StatusCodes.OK).json({ message: 'Fetched', data: { app_id, secrets, backup } });
