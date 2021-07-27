@@ -1,13 +1,21 @@
+import { Types } from 'mongoose';
 import { Project, Team, User } from '@models';
 import logger from '@tools/logging';
 
 /**
- * Find and return Project owner document using projectId (_id)
- * @param {string} projectId
+ * Find and return Project owner document using projectIdOrAppId (_id | app_id)
+ * @param {string} projectIdOrAppId
  * @returns {object} Project owner document
  */
-export default async function findOwnerByProjectId(projectId) {
-	const projectOwnerId = (await Project.findById(projectId)).owner;
+export default async function findOwnerByProjectIdOrAppId(projectIdOrAppId) {
+	const projectOwnerId = (
+		await Project.findOne(
+			{
+				$or: [{ _id: new Types.ObjectId(projectIdOrAppId) }, { app_id: projectIdOrAppId }]
+			},
+			{ owner: 1 }
+		)
+	).owner;
 	logger.debug('Project owner id: ' + projectOwnerId);
 	return (await User.findById(projectOwnerId)) || (await Team.findById(projectOwnerId));
 }

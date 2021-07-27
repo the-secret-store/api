@@ -13,7 +13,7 @@ const router = Router();
 router.post('/create', authorize, verifiedUsersOnly, ProjectController.createProject);
 
 router.post(
-	'/:projectId/post',
+	'/:projectIdOrAppId/post',
 	authorize,
 	verifiedUsersOnly,
 	privilegedUsersOnly,
@@ -21,7 +21,7 @@ router.post(
 );
 
 router.get(
-	'/:projectId/fetch',
+	'/:projectIdOrAppId/fetch',
 	authorize,
 	verifiedUsersOnly,
 	privilegedUsersOnly,

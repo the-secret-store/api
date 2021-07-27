@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 import { StatusCodes } from 'http-status-codes';
 import logger from '@tools/logging';
 import { validateProjectPostRequest } from '@validation';
@@ -78,17 +79,17 @@ export const createProject = async (req, res) => {
 };
 
 /**
- * Controller for /project/:projectId/post
+ * Controller for /project/:projectIdOrAppId/post
  */
 export const postSecrets = async (req, res) => {
 	//* use authorization, verifiedUsersOnly and privilegedUsersOnly middlewares
 	const { secrets } = req.body;
-	const { projectId } = req.params;
+	const { projectIdOrAppId } = req.params;
 
-	logger.debug(`Acknowledged secrets of ${projectId}: ${prettyJson(secrets)}`);
+	logger.debug(`Acknowledged secrets of ${projectIdOrAppId}: ${prettyJson(secrets)}`);
 
 	// 1. validate the request
-	const { errors } = validateProjectPostRequest(projectId, secrets);
+	const { errors } = validateProjectPostRequest(projectIdOrAppId, secrets);
 
 	if (errors) {
 		return res
@@ -100,7 +101,9 @@ export const postSecrets = async (req, res) => {
 
 	// 3. post the secrets
 	try {
-		const project = await Project.findById(projectId);
+		const project = await Project.findOne({
+			$or: [{ _id: new Types.ObjectId(projectIdOrAppId) }, { app_id: projectIdOrAppId }]
+		});
 		if (JSON.stringify(project.secrets) === JSON.stringify(secrets)) {
 			return res
 				.status(StatusCodes.OK)
@@ -129,13 +132,16 @@ export const postSecrets = async (req, res) => {
 };
 
 /**
- * Controller for /post/:projectId/fetch
+ * Controller for /post/:projectIdOrAppId/fetch
  */
 export const fetchSecrets = async (req, res) => {
 	//* use authorization, verifiedUsersOnly and privilegedUsersOnly middlewares
+	const { projectIdOrAppId } = req.params;
 	const {
 		_doc: { app_id, secrets, backup }
-	} = await Project.findById(req.params.projectId);
+	} = await Project.findOne({
+		$or: [{ _id: new Types.ObjectId(projectIdOrAppId) }, { app_id: projectIdOrAppId }]
+	});
 
 	// todo: decrypt
 	res.status(StatusCodes.OK).json({ message: 'Fetched', data: { app_id, secrets, backup } });
