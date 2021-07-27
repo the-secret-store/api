@@ -1,4 +1,5 @@
 module.exports = {
 	loggingLevel: 'info',
-	logRequests: false
+	logRequests: false,
+	sendEmails: true
 };
