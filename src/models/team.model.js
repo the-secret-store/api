@@ -9,11 +9,9 @@ const TeamSchema = new Schema(
 	{
 		team_name: { type: String, required: true, trim: true },
 		owner: { type: Types.ObjectId, ref: 'user' },
-		members: {
-			type: [{ type: Types.ObjectId, ref: 'user' }],
-			required: true,
-			default: insertOwner
-		},
+		admins: { type: [{ type: Types.ObjectId, ref: 'user' }], default: insertOwner },
+		members: { type: [{ type: Types.ObjectId, ref: 'user' }] },
+		visibility: { type: String, enum: ['public', 'private'], default: 'private' },
 		projects: { type: [{ type: Types.ObjectId, ref: 'project' }] }
 	},
 	{ timestamps: true }
