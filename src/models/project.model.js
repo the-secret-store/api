@@ -6,10 +6,12 @@ const ProjectSchema = new Schema(
 	{
 		project_name: { type: String, required: true, trim: true },
 		app_id: { type: String, default: generateRandomName, unique: true },
-		scope: { type: String, enum: ['user', 'team', 'public'], required: true },
-		secrets: { type: Schema.Types.Mixed },
+		scope: { type: String, enum: ['private', 'public'], required: true },
+		backup: { type: Schema.Types.Mixed, default: {} },
+		secrets: { type: Schema.Types.Mixed, default: {} },
+		lastUpdatedBy: { type: Schema.Types.ObjectId, ref: 'user' },
 		owner: { type: Schema.Types.ObjectId, required: true, refPath: 'ownerModel' },
-		ownerModel: { type: String, required: true, enums: ['user', 'team'] }
+		ownerModel: { type: String, enums: ['user', 'team'] }
 	},
 	{ timestamps: true }
 );

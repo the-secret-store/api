@@ -28,7 +28,7 @@ export default (req, res, next) => {
 
 	const token = obtainTokenFromHeader(authorization);
 	const payload = jwt.verify(token, TOKEN_PRIVATE_KEY);
-	logger.debug(prettyJson(payload));
+	logger.debug('Token payload: ' + prettyJson(payload));
 	req.user = payload; // has id, display_name, email, ? unverified
 	next();
 };
