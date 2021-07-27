@@ -1,12 +1,18 @@
 import { StatusCodes } from 'http-status-codes';
-import { Team, User, validateTeam } from '@models';
+import { Invitation, Team, User, validateTeam } from '@models';
 import logger from '@tools/logging';
-import prettyJson from '@utilities/prettyJson';
+import { prettyJson, sendMail } from '@utilities';
+import { validateTeamInvite } from '@validation';
 
 /**
  * Controller for teams
  *
  * Available controllers: createTeam, inviteUser
+ */
+
+/**
+ * Controller to create a team
+ * @requires {authorization} : header, {team_name}: body
  */
 
 export const createTeam = async (req, res) => {
@@ -46,4 +52,61 @@ export const createTeam = async (req, res) => {
 	await User.findByIdAndUpdate(owner, { $push: { teams: team._id } });
 
 	return res.status(StatusCodes.CREATED).json({ message: 'Team created', data: { ...team } });
+};
+
+/**
+ * Controller to invite an existing user to a team
+ *
+ * @requires {authorization}: header, {teamId}: params
+ */
+export const inviteUser = async (req, res) => {
+	const { display_name, id: invitingUserId } = req.user;
+	const { teamId } = req.params;
+	const { user_email } = req.body;
+	const { team_name, members, admins } = req.team; //mounted by middleware
+
+	// 1. validate the invite request
+	const { invitedUser, error } = await validateTeamInvite({ user_email });
+	if (error) {
+		return res
+			.status(StatusCodes.BAD_REQUEST)
+			.json({ message: error.details[0].message, details: error.details });
+	}
+
+	// 2i. check if the user is already a member
+	if (members.includes(invitedUser.id) || admins.includes(invitedUser.id)) {
+		return res
+			.status(StatusCodes.BAD_REQUEST)
+			.json({ message: 'User is already a member of the team' });
+	}
+
+	// 2ii. check if the user is already invited
+	if (await Invitation.findOne({ invited_to: teamId, invited_user: invitedUser.id })) {
+		return res.status(StatusCodes.BAD_REQUEST).json({ message: 'User is already invited' });
+	}
+
+	// 3. create the invitation
+	const invitation = await new Invitation({
+		invited_to: teamId,
+		invited_user: invitedUser.id,
+		invited_by: invitingUserId
+	}).save();
+
+	// 4. send invitation email
+	try {
+		await sendMail(
+			user_email,
+			`Invitation to ${team_name} on The Secret Store`,
+			`${display_name} has invited to join ${team_name} on The Secret Store, click the link to accept the invitation.
+		{{baseUrl}}/invitation/${invitation._doc._id}/accept`
+		);
+
+		res.status(StatusCodes.OK).json({ message: 'Invitation sent successfully' });
+	} catch (exp) {
+		await Invitation.findByIdAndDelete(invitation._doc._id);
+		res
+			.status(StatusCodes.FAILED_DEPENDENCY)
+			.json({ message: 'Could not send invitation email', details: exp });
+		throw exp;
+	}
 };
