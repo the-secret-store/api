@@ -31,7 +31,7 @@ export const validateTeam = teamObject => {
 	const schema = Joi.object({
 		team_name: Joi.string().required(),
 		owner: JoiObjectId().required(),
-		visibility: Joi.string().valid(['private', 'public'])
+		visibility: Joi.string().valid('private', 'public')
 	});
 
 	return schema.validate(teamObject);
