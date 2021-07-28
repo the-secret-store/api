@@ -18,7 +18,9 @@ export default async (req, res, next) => {
 		res.status(StatusCodes.BAD_GATEWAY).json({ message: 'Project owner could not be found' });
 	}
 
-	if (!(owner.id === user.id || owner.members?.includes(user.id))) {
+	if (
+		!(owner.id == user.id || owner.members?.includes(user.id) || owner.admins?.includes(user.id))
+	) {
 		return res.status(StatusCodes.FORBIDDEN).json({
 			message: 'Access denied',
 			details:
