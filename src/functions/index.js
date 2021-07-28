@@ -1,1 +1,1 @@
-export { default as findOwnerByProjectId } from './findOwnerByProjectId';
+export { default as findOwnerByProjectIdOrAppId } from './findOwnerByProjectIdOrAppId';
