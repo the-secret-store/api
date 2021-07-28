@@ -1,8 +1,8 @@
 import { StatusCodes } from 'http-status-codes';
 import { Invitation, Team } from '@models';
-import { JoiObjectId } from '@validation';
 import logger from '@tools/logging';
-import prettyJson from '@utilities/prettyJson';
+import { prettyJson } from '@utilities';
+import { JoiObjectId } from '@validation';
 
 /**
  * Controllers for /invitation routes
@@ -15,7 +15,7 @@ export const acceptInvitation = async (req, res) => {
 	const { id: userId } = req.user;
 
 	// 1. validate the invitation
-	const { error } = JoiObjectId.validate(invitationId);
+	const { error } = JoiObjectId().validate(invitationId);
 	if (error) {
 		return res
 			.status(StatusCodes.BAD_REQUEST)

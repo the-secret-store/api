@@ -1,5 +1,6 @@
 import Joi from 'joi';
 import { model, Schema, Types } from 'mongoose';
+import { JoiObjectId } from '@validation';
 
 function insertOwner() {
 	return [this.owner];
@@ -29,7 +30,7 @@ export default model('team', TeamSchema);
 export const validateTeam = teamObject => {
 	const schema = Joi.object({
 		team_name: Joi.string().required(),
-		owner: Joi.string().required(),
+		owner: JoiObjectId().required(),
 		visibility: Joi.string().valid(['private', 'public'])
 	});
 

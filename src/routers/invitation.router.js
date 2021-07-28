@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { authorize, verifiedUsersOnly } from '@middlewares';
 import { InvitationController } from '@controllers';
+import { authorize, verifiedUsersOnly } from '@middlewares';
 
 /**
  * Router for /invitation routes

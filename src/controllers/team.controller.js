@@ -60,13 +60,14 @@ export const createTeam = async (req, res) => {
  * @requires {authorization}: header, {teamId}: params
  */
 export const inviteUser = async (req, res) => {
+	// * use authorization, verifiedUsersOnly and teamAdminsOnly middlewares
 	const { display_name, id: invitingUserId } = req.user;
 	const { teamId } = req.params;
 	const { user_email } = req.body;
 	const { team_name, members, admins } = req.team; //mounted by middleware
 
 	// 1. validate the invite request
-	const { invitedUser, error } = await validateTeamInvite({ user_email });
+	const { invitedUser, error } = await validateTeamInvite({ teamId, user_email });
 	if (error) {
 		return res
 			.status(StatusCodes.BAD_REQUEST)

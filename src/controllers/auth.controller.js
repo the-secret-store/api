@@ -5,8 +5,8 @@ import jwt from 'jsonwebtoken';
 
 import User from '@models/user.model';
 import logger from '@tools/logging';
-import validateAuthRequest from '@validation/auth.validation';
 import { prettyJson } from '@utilities';
+import { validateAuthRequest } from '@validation';
 
 /**
  * Controller for /user

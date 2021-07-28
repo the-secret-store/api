@@ -10,6 +10,6 @@ const InvitationSchema = new Schema(
 	{ timestamps: true }
 );
 
+// Expires in 1 week
 InvitationSchema.index({ createdAt: 1 }, { expireAfterSeconds: 60 * 60 * 24 * 7 });
-
 export default model('invitation', InvitationSchema);

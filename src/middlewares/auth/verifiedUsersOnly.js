@@ -10,7 +10,11 @@ export default (req, res, next) => {
 	if (unverified) {
 		return res
 			.status(StatusCodes.FORBIDDEN)
-			.json({ message: 'Your account needs to be verified to perform this action' });
+			.json({
+				message: 'Your account needs to be verified to perform this action',
+				extendedMessage:
+					'If you have verified your account and yet seeing this message, please try logging out and logging in again.'
+			});
 	}
 	next();
 };

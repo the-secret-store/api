@@ -1,8 +1,8 @@
 import { StatusCodes } from 'http-status-codes';
 import logger from '@tools/logging';
-import { validateProjectPostRequest } from '@validation';
-import { Project, Team, User, validateProject } from '@models';
+import { Project, Team, User } from '@models';
 import { prettyJson } from '@utilities';
+import { validateProject, validateProjectPostRequest } from '@validation';
 
 /**
  * Controller for /project

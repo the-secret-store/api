@@ -1,7 +1,6 @@
 import { Router } from 'express';
-import { authorize, verifiedUsersOnly } from '@middlewares';
 import { TeamController } from '@controllers';
-import teamAdminsOnly from 'src/middlewares/auth/teamAdminsOnly';
+import { authorize, teamAdminsOnly, verifiedUsersOnly } from '@middlewares';
 
 /**
  * Router for /team

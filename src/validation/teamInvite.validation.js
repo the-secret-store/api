@@ -1,20 +1,24 @@
 import Joi from 'joi';
+import JoiObjectId from './ObjectId.schema';
 import { User } from '@models';
 import logger from '@tools/logging';
 import { prettyJson } from '@utilities';
 
 /**
  *  Validates team invite request
- * @param {{user_email: string}} invitationConfig
+ * @param {{user_email: string, teamId: string}} invitationConfig
  * @returns
  */
-export default async function validateTeamInvite({ user_email }) {
+export default async function validateTeamInvite({ teamId, user_email }) {
 	// is already a valid team id, since teamAdminsOnly middleware does not allow invalid team ids
 
-	let { error } = Joi.string()
-		.email({ tlds: { allow: false } })
-		.required()
-		.validate(user_email);
+	let { error } = Joi.object({
+		teamId: JoiObjectId(),
+		user_email: Joi.string()
+			.email({ tlds: { allow: false } })
+			.required()
+			.validate({ teamId, user_email })
+	});
 
 	if (error) {
 		logger.debug(prettyJson(error));
@@ -27,7 +31,7 @@ export default async function validateTeamInvite({ user_email }) {
 			error: {
 				details: [
 					{
-						message: `${user_email} is not found the user records`,
+						message: `${user_email} is not found in the user records`,
 						extendedMessage: 'Request the user to create an account'
 					}
 				]
