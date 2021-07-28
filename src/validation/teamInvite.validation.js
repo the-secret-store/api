@@ -10,15 +10,13 @@ import { prettyJson } from '@utilities';
  * @returns
  */
 export default async function validateTeamInvite({ teamId, user_email }) {
-	// is already a valid team id, since teamAdminsOnly middleware does not allow invalid team ids
-
+	//* use authorization, verifiedUsersOnly, teamAdminsOnly middlewares
 	let { error } = Joi.object({
 		teamId: JoiObjectId(),
 		user_email: Joi.string()
 			.email({ tlds: { allow: false } })
 			.required()
-			.validate({ teamId, user_email })
-	});
+	}).validate({ teamId, user_email });
 
 	if (error) {
 		logger.debug(prettyJson(error));
