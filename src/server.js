@@ -3,7 +3,6 @@ import 'dotenv/config';
 import config from 'config';
 
 import {
-	checkEnv,
 	connectDB,
 	registerListener,
 	registerLogging,
@@ -19,7 +18,6 @@ const HOST = config.get('host');
 const app = express();
 
 registerLogging(app);
-checkEnv();
 registerPreprocessor(app);
 setupDocs(app);
 registerRouters(app);

@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import JoiObjectId from './ObjectId.schema';
 
 /**
  * Validate projectId and secrets object types in post request
@@ -6,11 +7,11 @@ import Joi from 'joi';
  * @param {object} secrets
  * @returns Joi validator
  */
-export default function validateProjectPostRequest(projectId, secrets) {
+export default function validateProjectPostRequest(projectIdOrAppId, secrets) {
 	const schema = Joi.object({
-		projectId: Joi.string().required(),
+		projectIdOrAppId: projectIdOrAppId.includes('-') ? Joi.string().required() : JoiObjectId(),
 		secrets: Joi.object().required()
 	});
 
-	return schema.validate({ projectId, secrets });
+	return schema.validate({ projectIdOrAppId, secrets });
 }

@@ -8,6 +8,6 @@ const OTPSchema = new Schema(
 	{ timestamps: true }
 );
 
+// Expires in 1 hour
 OTPSchema.index({ createdAt: 1 }, { expireAfterSeconds: 60 * 60 });
-
 export default model('otp', OTPSchema);

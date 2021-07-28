@@ -1,6 +1,7 @@
 import Joi from 'joi';
 import { model, Schema } from 'mongoose';
 import { generateRandomName } from '@utilities';
+import { JoiObjectId } from '@validation';
 
 const ProjectSchema = new Schema(
 	{
@@ -28,8 +29,8 @@ export default model('project', ProjectSchema);
 export const validateProject = projectObject => {
 	const schema = Joi.object({
 		project_name: Joi.string().required(),
-		owner: Joi.string().required(),
-		scope: Joi.string().required()
+		owner: JoiObjectId(),
+		scope: Joi.string().required().valid('private', 'public')
 	});
 
 	return schema.validate(projectObject);

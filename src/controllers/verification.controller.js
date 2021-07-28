@@ -4,6 +4,12 @@ import logger from '@tools/logging';
 import { generateOTP, sendMail } from '@utilities';
 
 /**
+ * Controller for OTP - email verifications
+ *
+ * Available controllers: sendOTP, verifyAccount
+ */
+
+/**
  * Send OTP to an authorized user
  *
  * @route: /verify/get-otp

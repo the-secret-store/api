@@ -1,8 +1,8 @@
 import { StatusCodes } from 'http-status-codes';
 import logger from '@tools/logging';
-import { validateProjectPostRequest } from '@validation';
-import { Project, Team, User, validateProject } from '@models';
+import { Project, Team, User } from '@models';
 import { prettyJson } from '@utilities';
+import { validateProject, validateProjectPostRequest } from '@validation';
 
 /**
  * Controller for /project
@@ -84,6 +84,7 @@ export const postSecrets = async (req, res) => {
 	//* use authorization, verifiedUsersOnly and privilegedUsersOnly middlewares
 	const { secrets } = req.body;
 	const { projectIdOrAppId } = req.params;
+	const { project } = req; // the document from db
 
 	logger.debug(`Acknowledged secrets of ${projectIdOrAppId}: ${prettyJson(secrets)}`);
 
@@ -100,9 +101,6 @@ export const postSecrets = async (req, res) => {
 
 	// 3. post the secrets
 	try {
-		const project = await (projectIdOrAppId.includes('-')
-			? Project.findOne({ app_id: projectIdOrAppId })
-			: Project.findById(projectIdOrAppId));
 		if (JSON.stringify(project.secrets) === JSON.stringify(secrets)) {
 			return res
 				.status(StatusCodes.OK)
@@ -135,12 +133,9 @@ export const postSecrets = async (req, res) => {
  */
 export const fetchSecrets = async (req, res) => {
 	//* use authorization, verifiedUsersOnly and privilegedUsersOnly middlewares
-	const { projectIdOrAppId } = req.params;
 	const {
 		_doc: { app_id, secrets, backup }
-	} = await (projectIdOrAppId.includes('-')
-		? Project.findOne({ app_id: projectIdOrAppId })
-		: Project.findById(projectIdOrAppId));
+	} = req.project;
 
 	// todo: decrypt
 	res.status(StatusCodes.OK).json({ message: 'Fetched', data: { app_id, secrets, backup } });
