@@ -1,6 +1,13 @@
 import 'express-async-errors';
 import { StatusCodes } from 'http-status-codes';
-import { AuthRouter, ProjectRouter, TeamRouter, UserRouter, VerificationRouter } from '@routers';
+import {
+	AuthRouter,
+	InvitationRouter,
+	ProjectRouter,
+	TeamRouter,
+	UserRouter,
+	VerificationRouter
+} from '@routers';
 import config from 'config';
 
 /**
@@ -9,6 +16,7 @@ import config from 'config';
 
 export default function registerRouters(app) {
 	app.use('/auth', AuthRouter);
+	app.use('/invitation', InvitationRouter);
 	app.use('/project', ProjectRouter);
 	app.use('/team', TeamRouter);
 	app.use('/user', UserRouter);
