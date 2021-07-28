@@ -29,7 +29,8 @@ export default model('team', TeamSchema);
 export const validateTeam = teamObject => {
 	const schema = Joi.object({
 		team_name: Joi.string().required(),
-		owner: Joi.string().required()
+		owner: Joi.string().required(),
+		visibility: Joi.string().valid(['private', 'public'])
 	});
 
 	return schema.validate(teamObject);

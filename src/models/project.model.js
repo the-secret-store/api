@@ -29,7 +29,7 @@ export const validateProject = projectObject => {
 	const schema = Joi.object({
 		project_name: Joi.string().required(),
 		owner: Joi.string().required(),
-		scope: Joi.string().required()
+		scope: Joi.string().required().valid(['private', 'public'])
 	});
 
 	return schema.validate(projectObject);
