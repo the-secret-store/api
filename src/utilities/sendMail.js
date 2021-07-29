@@ -1,5 +1,5 @@
 import config from 'config';
-import logger from '@tools/logging';
+import { logger } from '@tools';
 import { mailer } from '@tools';
 import { prettyJson } from '@utilities';
 

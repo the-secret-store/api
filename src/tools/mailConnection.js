@@ -1,7 +1,7 @@
 import { createTransport } from 'nodemailer';
 import config from 'config';
 import chalk from 'chalk';
-import logger from '@tools/logging';
+import { logger } from '@tools';
 
 const transport = createTransport({
 	host: 'smtp.mailgun.org',

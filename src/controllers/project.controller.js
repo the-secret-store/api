@@ -1,5 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
-import logger from '@tools/logging';
+import { logger } from '@tools';
 import { Project, Team, User } from '@models';
 import { prettyJson } from '@utilities';
 import { validateProject, validateProjectPostRequest } from '@validation';

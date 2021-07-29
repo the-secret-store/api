@@ -1,7 +1,7 @@
 import bcryptjs from 'bcryptjs';
 import { StatusCodes } from 'http-status-codes';
-import logger from '@tools/logging';
 import { User, validateUser } from '@models';
+import { logger } from '@tools';
 import { prettyJson } from '@utilities';
 
 /**

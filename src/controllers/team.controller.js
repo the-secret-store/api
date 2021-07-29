@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 import { Invitation, Team, User, validateTeam } from '@models';
-import logger from '@tools/logging';
+import { logger } from '@tools';
 import { prettyJson, sendMail } from '@utilities';
 import { validateTeamInvite } from '@validation';
 

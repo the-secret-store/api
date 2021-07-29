@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import logger from '@tools/logging';
+import { logger } from '@tools';
 import config from 'config';
 import { name as appName, version } from 'package.json';
 

@@ -1,5 +1,5 @@
 import { Project, Team, User } from '@models';
-import logger from '@tools/logging';
+import { logger } from '@tools';
 import { prettyJson } from '@utilities';
 
 /**
