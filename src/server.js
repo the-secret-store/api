@@ -16,15 +16,18 @@ import {
 const PORT = config.get('port');
 const HOST = config.get('host');
 
-const app = express();
+function spinServer(port, host) {
+	const app = express();
 
-checkEnv();
-registerLogging(app);
-registerPreprocessor(app);
-setupDocs(app);
-registerRouters(app);
-connectDB();
-verifyMailConnection();
+	checkEnv();
+	registerLogging(app);
+	registerPreprocessor(app);
+	setupDocs(app);
+	registerRouters(app);
+	connectDB();
+	verifyMailConnection();
 
-const server = registerListener(app, PORT, HOST);
-module.exports = server;
+	return registerListener(app, port, host);
+}
+
+module.exports = spinServer(PORT, HOST);
