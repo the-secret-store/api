@@ -1,17 +1,19 @@
 import request from 'supertest';
+import mongoose from 'mongoose';
 import { StatusCodes } from 'http-status-codes';
-import User from '@models/user.model';
+import { User } from '@models';
 import { validUserObject1 } from '../constants/user.constant';
 
 describe('Auth routes', () => {
 	describe('Login with email and password', () => {
-		let server;
+		const server = require('../../src/server');
 		beforeEach(async () => {
-			server = require('../../src/server');
 			await User.deleteMany({});
 		});
-		afterEach(async () => {
+
+		afterAll(async () => {
 			await server.close();
+			await mongoose.connection.close();
 		});
 
 		const registerUser = async payload => {

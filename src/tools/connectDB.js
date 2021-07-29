@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import config from 'config';
 import chalk from 'chalk';
-import logger from '@tools/logging';
+import { logger } from '@tools';
 
 /**
  * Connects to the mongo DB server

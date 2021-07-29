@@ -1,7 +1,7 @@
 import { createTransport } from 'nodemailer';
 import config from 'config';
 import chalk from 'chalk';
-import logger from '@tools/logging';
+import { logger } from '@tools';
 
 const transport = createTransport({
 	host: 'smtp.mailgun.org',
@@ -19,6 +19,11 @@ export default transport;
 
 export async function verifyMailConnection() {
 	try {
+		const allowEmails = config.get('sendEmails');
+		if (!allowEmails) {
+			logger.info('Skipping email connection verification.');
+			return;
+		}
 		await transport.verify();
 		logger.info(`Connection to mail server ${chalk.greenBright('successful')}`);
 	} catch (exp) {

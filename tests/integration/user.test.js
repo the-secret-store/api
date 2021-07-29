@@ -1,25 +1,28 @@
 import request from 'supertest';
+import mongoose from 'mongoose';
+import { StatusCodes } from 'http-status-codes';
 import { User } from '@models';
 import { validUserObject1 } from '../constants/user.constant';
 
 describe('User router', () => {
 	describe('Registration [POST /register]', () => {
-		let server;
+		const server = require('../../src/server');
 		beforeEach(async () => {
-			server = require('../../src/server');
 			await User.deleteMany({});
 		});
-		afterEach(async () => {
+
+		afterAll(async () => {
 			await server.close();
+			await mongoose.connection.close();
 		});
 
-		const exec = async payload => {
-			return await request(server).post('/user/register').send(payload);
+		const registerUser = async userObject => {
+			return await request(server).post('/user/register').send(userObject);
 		};
 
 		it('return 200 for valid user', async () => {
-			const response = await exec(validUserObject1);
-			expect(response.statusCode).toEqual(200);
+			const response = await registerUser(validUserObject1);
+			expect(response.statusCode).toEqual(StatusCodes.OK);
 		});
 
 		it('return 400 for user validation error', async () => {
@@ -27,23 +30,23 @@ describe('User router', () => {
 			// we don't have to test for all the validations, since unit tests take care of that
 			payload.name = 'X';
 
-			const response = await exec(payload);
-			expect(response.statusCode).toEqual(400);
+			const response = await registerUser(payload);
+			expect(response.statusCode).toEqual(StatusCodes.BAD_REQUEST);
 		});
 
 		it('return 400 for invalid user structure', async () => {
 			const payload = { ...validUserObject1 };
 			delete payload.email;
 
-			const response = await exec(payload);
-			expect(response.statusCode).toEqual(400);
+			const response = await registerUser(payload);
+			expect(response.statusCode).toEqual(StatusCodes.BAD_REQUEST);
 		});
 
 		it('should throw 400 for duplication', async () => {
-			await exec(validUserObject1);
+			await registerUser(validUserObject1);
 
-			const response = await exec(validUserObject1);
-			expect(response.statusCode).toEqual(400);
+			const response = await registerUser(validUserObject1);
+			expect(response.statusCode).toEqual(StatusCodes.BAD_REQUEST);
 		});
 	});
 });

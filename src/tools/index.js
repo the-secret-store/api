@@ -1,7 +1,7 @@
 export { default as checkEnv } from './checkEnv';
 export { default as connectDB } from './connectDB';
 export { default as registerListener } from './listener';
-export { registerLogging } from './logging';
+export { default as logger, registerLogging } from './logging';
 export { default as mailer, verifyMailConnection } from './mailConnection';
 export { default as registerPreprocessor } from './preprocessors';
 export { default as registerRouters } from './router';

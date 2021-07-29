@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import config from 'config';
 import { StatusCodes } from 'http-status-codes';
-import logger from '@tools/logging';
+import { logger } from '@tools';
 import { prettyJson } from '@utilities';
 
 const TOKEN_PRIVATE_KEY = config.get('secretKey');

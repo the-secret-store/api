@@ -3,8 +3,8 @@ import config from 'config';
 import { StatusCodes } from 'http-status-codes';
 import jwt from 'jsonwebtoken';
 
-import User from '@models/user.model';
-import logger from '@tools/logging';
+import { User } from '@models';
+import { logger } from '@tools';
 import { prettyJson } from '@utilities';
 import { validateAuthRequest } from '@validation';
 

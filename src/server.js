@@ -1,6 +1,7 @@
 import express from 'express';
 import 'dotenv/config';
 import config from 'config';
+import checkEnv from '@tools/checkEnv';
 
 import {
 	connectDB,
@@ -15,14 +16,18 @@ import {
 const PORT = config.get('port');
 const HOST = config.get('host');
 
-const app = express();
+function spinServer(port, host) {
+	const app = express();
 
-registerLogging(app);
-registerPreprocessor(app);
-setupDocs(app);
-registerRouters(app);
-connectDB();
-verifyMailConnection();
+	checkEnv();
+	registerLogging(app);
+	registerPreprocessor(app);
+	setupDocs(app);
+	registerRouters(app);
+	connectDB();
+	verifyMailConnection();
 
-const server = registerListener(app, PORT, HOST);
-module.exports = server;
+	return registerListener(app, port, host);
+}
+
+module.exports = spinServer(PORT, HOST);
