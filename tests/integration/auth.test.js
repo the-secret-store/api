@@ -1,4 +1,5 @@
 import request from 'supertest';
+import mongoose from 'mongoose';
 import { StatusCodes } from 'http-status-codes';
 import { User } from '@models';
 import { validUserObject1 } from '../constants/user.constant';
@@ -11,6 +12,10 @@ describe('Auth routes', () => {
 		});
 		afterEach(async () => {
 			await server.close();
+		});
+
+		afterAll(async () => {
+			await mongoose.connection.close();
 		});
 
 		const registerUser = async payload => {
