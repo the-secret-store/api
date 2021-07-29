@@ -10,11 +10,9 @@ describe('Auth routes', () => {
 		beforeEach(async () => {
 			await User.deleteMany({});
 		});
-		afterEach(async () => {
-			await server.close();
-		});
 
 		afterAll(async () => {
+			await server.close();
 			await mongoose.connection.close();
 		});
 
