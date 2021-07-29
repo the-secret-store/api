@@ -18,7 +18,7 @@
 		"format:check": "prettier -c \"**/*.js\"",
 		"lint": "eslint \"src/**/*.js\"",
 		"lint:fix": "npm run lint -- --fix",
-		"test": "jest"
+		"test": "jest --forceExit --detectOpenHandles --maxWorkers=1"
 	},
 	"keywords": [],
 	"author": "",
