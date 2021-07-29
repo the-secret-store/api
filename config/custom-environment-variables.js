@@ -1,5 +1,3 @@
-import checkEnv from '@tools/checkEnv';
-
 /**
  * These values will be loaded from '.env' file
  * refer docs: https://github.com/lorenwest/node-config/wiki/Environment-Variables
@@ -7,8 +5,6 @@ import checkEnv from '@tools/checkEnv';
  *
  * logRequests can be exposed from env to make it easier to troubleshoot in production
  */
-
-checkEnv();
 
 module.exports = {
 	host: 'HOST',

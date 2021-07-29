@@ -62,8 +62,6 @@ const getTransports = environment => {
 			return winstonConfigs;
 
 		case 'test':
-			return {};
-
 		case 'development':
 		default:
 			// pop out file transports, log only on console

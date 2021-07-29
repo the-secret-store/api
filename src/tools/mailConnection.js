@@ -19,6 +19,11 @@ export default transport;
 
 export async function verifyMailConnection() {
 	try {
+		const allowEmails = config.get('sendEmails');
+		if (!allowEmails) {
+			logger.info('Skipping email connection verification.');
+			return;
+		}
 		await transport.verify();
 		logger.info(`Connection to mail server ${chalk.greenBright('successful')}`);
 	} catch (exp) {

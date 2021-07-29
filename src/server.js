@@ -1,6 +1,7 @@
 import express from 'express';
 import 'dotenv/config';
 import config from 'config';
+import checkEnv from '@tools/checkEnv';
 
 import {
 	connectDB,
@@ -17,6 +18,7 @@ const HOST = config.get('host');
 
 const app = express();
 
+checkEnv();
 registerLogging(app);
 registerPreprocessor(app);
 setupDocs(app);
