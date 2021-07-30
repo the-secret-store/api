@@ -4,6 +4,7 @@ export default {
 			summary: 'Send verification code to an authorized user',
 			description:
 				'Sends email with a verification code to an authorized user, requires authorization header in Bearer <token> format',
+			tags: ['verify'],
 			consumes: 'application/json',
 			parameters: [
 				{
@@ -28,6 +29,7 @@ export default {
 			summary: 'Verify the user with otp',
 			description:
 				'Sets the logged in user as verified using verification code, requires authorization header in Bearer <token> format and otp in the body',
+			tags: ['verify'],
 			consumes: 'application/json',
 			parameters: [
 				{

@@ -3,6 +3,7 @@ export default {
 		post: {
 			summary: 'Register a new user',
 			description: 'Create a new user',
+			tags: ['user'],
 			consumes: 'application/json',
 			parameters: [
 				{

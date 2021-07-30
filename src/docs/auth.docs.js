@@ -4,6 +4,7 @@ export default {
 			summary: 'Login using email and password',
 			description:
 				'Authenticates a user, responds with a JSON Web Token if authenticated successfully',
+			tags: ['auth'],
 			consumes: 'application/json',
 			parameters: [
 				{
@@ -37,6 +38,7 @@ export default {
 			summary: 'Check if the user is authorized',
 			description:
 				'Authorizes a user, requires authorization header in Bearer <token> format and responds with the payload of JSON Web Token if the user is authorized',
+			tags: ['auth'],
 			consumes: 'application/json',
 			parameters: [
 				{
