@@ -1,5 +1,7 @@
 module.exports = {
 	loggingLevel: 'info',
 	logRequests: false,
-	sendEmails: true
+	sendEmails: true,
+	maxTeams: 15,
+	maxProjects: 5
 };
