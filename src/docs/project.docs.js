@@ -5,7 +5,8 @@ const ProjectOrAppIdParam = {
 	name: 'projectIdOrAppId',
 	description: 'The project id or the app id',
 	required: true,
-	type: 'string'
+	type: 'string',
+	format: 'uuid'
 };
 
 export default {

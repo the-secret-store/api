@@ -13,6 +13,7 @@ export default {
 					in: 'body',
 					name: 'User details',
 					description: 'The user object to register',
+					required: true,
 					schema: {
 						type: 'object',
 						required: ['display_name', 'email', 'password'],
@@ -49,6 +50,7 @@ export default {
 					in: 'body',
 					name: 'Password change parameters',
 					description: 'The password change parameters',
+					required: true,
 					schema: {
 						type: 'object',
 						required: ['currentPassword', 'newPassword', 'newPasswordConfirmation'],

@@ -31,12 +31,15 @@ export default {
 					in: 'body',
 					name: 'Verification Code',
 					description: 'The verification code',
-					type: 'object',
-					required: ['otp'],
-					properties: {
-						otp: { type: 'number' }
-					},
-					example: { otp: 567890 }
+					required: true,
+					schema: {
+						type: 'object',
+						required: ['otp'],
+						properties: {
+							otp: { type: 'number' }
+						},
+						example: { otp: 567890 }
+					}
 				}
 			],
 			responses: {

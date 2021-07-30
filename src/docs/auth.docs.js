@@ -13,6 +13,7 @@ export default {
 				{
 					in: 'body',
 					name: 'Login Credentials',
+					required: true,
 					description: 'The login credentials to authenticate the user',
 					schema: {
 						type: 'object',
