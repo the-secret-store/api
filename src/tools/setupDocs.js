@@ -2,7 +2,7 @@ import swaggerUI from 'swagger-ui-express';
 import { name as appName, description, license, version } from 'package.json';
 import config from 'config';
 import docs from '@docs';
-import tags from '@docs/tags.docs';
+import tags from '@docs/tags';
 
 const documentObject = {
 	swagger: '2.0',

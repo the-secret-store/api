@@ -1,4 +1,4 @@
-import { AuthHeader } from './definitions.docs';
+import { AuthHeader } from './definitions';
 
 export default {
 	'/user/register': {
