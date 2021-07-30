@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import JoiObjectId from './ObjectId.schema';
+import { JoiObjectId } from './schemas';
 
 /**
  * Validate projectId and secrets object types in post request
