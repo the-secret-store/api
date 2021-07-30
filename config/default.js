@@ -3,5 +3,6 @@ module.exports = {
 	port: 5000,
 	serveDocument: true,
 	sendEmails: false,
-	TeamLimit: Infinity
+	maxTeams: Infinity,
+	maxProjects: Infinity
 };

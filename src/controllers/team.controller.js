@@ -45,7 +45,7 @@ export const createTeam = async (req, res) => {
 
 	// 2p. check if the user has reached max no. of teams limit
 	const noOfTeams = (await User.findById(owner, { teams: 1 })).teams.length;
-	if (noOfTeams >= config.get('TeamLimit')) {
+	if (noOfTeams >= config.get('maxTeams')) {
 		return res.status(StatusCodes.FORBIDDEN).json({
 			message: 'Number of teams limit reached',
 			extendedMessage: `You have already created/ joined ${noOfTeams} teams, which the upper limit. Remove/ leave unwanted/ old teams to create more.`
