@@ -1,14 +1,19 @@
+import { AuthHeader } from './definitions';
+
 export default {
 	'/auth/login': {
 		post: {
 			summary: 'Login using email and password',
 			description:
 				'Authenticates a user, responds with a JSON Web Token if authenticated successfully',
+			tags: ['auth'],
 			consumes: 'application/json',
+			produces: 'application/json',
 			parameters: [
 				{
 					in: 'body',
-					name: 'loginCredentials',
+					name: 'Login Credentials',
+					required: true,
 					description: 'The login credentials to authenticate the user',
 					schema: {
 						type: 'object',
@@ -16,6 +21,10 @@ export default {
 						properties: {
 							email: { type: 'string' },
 							password: { type: 'string' }
+						},
+						example: {
+							email: 'john@example.com',
+							password: 'JohnDoe1!'
 						}
 					}
 				}
@@ -33,18 +42,10 @@ export default {
 			summary: 'Check if the user is authorized',
 			description:
 				'Authorizes a user, requires authorization header in Bearer <token> format and responds with the payload of JSON Web Token if the user is authorized',
+			tags: ['auth'],
 			consumes: 'application/json',
-			parameters: [
-				{
-					in: 'header',
-					name: 'JWT',
-					required: true,
-					description: 'The JSON Web Token to authorize',
-					schema: {
-						type: 'string'
-					}
-				}
-			],
+			produces: 'application/json',
+			parameters: [AuthHeader],
 			responses: {
 				200: { description: 'Authorization successful' },
 				401: { summary: 'Invalid token', description: 'Missing auth header or invalid token' },

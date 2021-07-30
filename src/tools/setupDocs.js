@@ -2,6 +2,7 @@ import swaggerUI from 'swagger-ui-express';
 import { name as appName, description, license, version } from 'package.json';
 import config from 'config';
 import docs from '@docs';
+import tags from '@docs/tags';
 
 const documentObject = {
 	swagger: '2.0',
@@ -13,7 +14,8 @@ const documentObject = {
 		},
 		version
 	},
-	paths: docs
+	paths: docs,
+	tags
 };
 
 export default function setupDocs(app) {
