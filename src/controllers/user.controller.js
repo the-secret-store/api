@@ -1,14 +1,17 @@
-import bcryptjs from 'bcryptjs';
+import bcrypt from 'bcryptjs';
 import { StatusCodes } from 'http-status-codes';
 import { User, validateUser } from '@models';
 import { logger } from '@tools';
 import { prettyJson } from '@utilities';
+import { validatePasswordChange } from '@validation';
 
 /**
  * Controller for /user
  *
  * Available controllers: registerUser
  */
+
+const SALT_ROUNDS = 5;
 
 /**
  * Register a new user
@@ -18,7 +21,6 @@ import { prettyJson } from '@utilities';
  * @requires: body { displayName, email, password, teams?, projects? }
  * @returns: 200 | 400 | 500
  */
-
 export const registerUser = async (req, res) => {
 	const { body } = req;
 	logger.debug('Acknowledged: ' + prettyJson(body));
@@ -34,8 +36,8 @@ export const registerUser = async (req, res) => {
 		}
 
 		// 2. hash the password
-		const salt = await bcryptjs.genSalt(5);
-		const hashed = await bcryptjs.hash(body.password, salt);
+		const salt = await bcrypt.genSalt(SALT_ROUNDS);
+		const hashed = await bcrypt.hash(body.password, salt);
 
 		// 3. create the user document
 		const theNewUser = new User({ ...body, password: hashed });
@@ -65,4 +67,47 @@ export const registerUser = async (req, res) => {
 
 		throw err;
 	}
+};
+
+/**
+ * Change password
+ *
+ * @route: /user/changePassword
+ * @method: POST
+ * @requires: body { currentPassword, newPassword, newPasswordConfirmation }, header {authorization}
+ * @returns: 200 | 400 | 403 | 500
+ */
+export const changePassword = async (req, res) => {
+	const {
+		body,
+		user: { id: userId }
+	} = req;
+
+	logger.debug('Acknowledged: ' + prettyJson(body));
+
+	// 1. validate the request
+	const { error } = validatePasswordChange({ ...body, userId });
+	if (error) {
+		logger.debug(prettyJson(error));
+		return res
+			.status(StatusCodes.BAD_REQUEST)
+			.json({ message: error.details[0].message, details: error });
+	}
+
+	// 2. authenticate the user yet again (although we're using auth middlewares)
+	const user = await User.findById(userId);
+	const authenticated = await bcrypt.compare(body.currentPassword, user.password);
+	if (!authenticated) {
+		return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Wrong password' });
+	}
+
+	// 3. update the password
+	const salt = await bcrypt.genSalt(SALT_ROUNDS);
+	const hashedPassword = await bcrypt.hash(body.newPassword, salt);
+
+	user.password = hashedPassword;
+	await user.save();
+
+	logger.debug('Updated password');
+	res.status(StatusCodes.OK).json({ message: 'Password updated successfully' });
 };
