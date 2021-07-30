@@ -1,4 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
+import config from 'config';
 import { logger } from '@tools';
 import { Project, Team, User } from '@models';
 import { prettyJson } from '@utilities';
@@ -35,6 +36,15 @@ export const createProject = async (req, res) => {
 	// 2ii. check if the project already exists
 	if (await Project.findOne({ project_name, owner })) {
 		return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Project already exists' });
+	}
+
+	// 2p. check if the owner has reached no of projects limit
+	const noOfProjects = (await Project.countDocuments({ owner })) || 0;
+	if (noOfProjects >= config.get('maxProjects')) {
+		return res.status(StatusCodes.BAD_REQUEST).json({
+			message: `You have reached the limit of ${noOfProjects} projects`,
+			extendedMessage: `You have already created ${noOfProjects} projects, which is the maximum number of projects allowed per user/ team. Remove any old projects to create a new one`
+		});
 	}
 
 	// todo: 3. hash, make the secrets string or something

@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import JoiObjectId from './ObjectId.schema';
+import { JoiObjectId } from './schemas';
 import { User } from '@models';
 import { logger } from '@tools';
 import { prettyJson } from '@utilities';
@@ -10,9 +10,8 @@ import { prettyJson } from '@utilities';
  * @returns
  */
 export default async function validateTeamInvite({ teamId, user_email }) {
-	//* use authorization, verifiedUsersOnly, teamAdminsOnly middlewares
 	let { error } = Joi.object({
-		teamId: JoiObjectId(),
+		teamId: JoiObjectId().required(),
 		user_email: Joi.string()
 			.email({ tlds: { allow: false } })
 			.required()

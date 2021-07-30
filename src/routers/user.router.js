@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { UserController } from '@controllers';
+import { authorize } from '@middlewares';
 
 const router = Router();
 
@@ -10,5 +11,6 @@ const router = Router();
  */
 
 router.post('/register', UserController.registerUser);
+router.post('/changePassword', authorize, UserController.changePassword);
 
 export default router;
