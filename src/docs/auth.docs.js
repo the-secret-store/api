@@ -1,3 +1,5 @@
+import { AuthHeader } from './definitions.docs';
+
 export default {
 	'/auth/login': {
 		post: {
@@ -6,10 +8,11 @@ export default {
 				'Authenticates a user, responds with a JSON Web Token if authenticated successfully',
 			tags: ['auth'],
 			consumes: 'application/json',
+			produces: 'application/json',
 			parameters: [
 				{
 					in: 'body',
-					name: 'loginCredentials',
+					name: 'Login Credentials',
 					description: 'The login credentials to authenticate the user',
 					schema: {
 						type: 'object',
@@ -40,17 +43,8 @@ export default {
 				'Authorizes a user, requires authorization header in Bearer <token> format and responds with the payload of JSON Web Token if the user is authorized',
 			tags: ['auth'],
 			consumes: 'application/json',
-			parameters: [
-				{
-					in: 'header',
-					name: 'JWT',
-					required: true,
-					description: 'The JSON Web Token to authorize',
-					schema: {
-						type: 'string'
-					}
-				}
-			],
+			produces: 'application/json',
+			parameters: [AuthHeader],
 			responses: {
 				200: { description: 'Authorization successful' },
 				401: { summary: 'Invalid token', description: 'Missing auth header or invalid token' },

@@ -11,6 +11,10 @@ export default {
 		{
 			name: 'verify',
 			description: 'Verification routes'
+		},
+		{
+			name: 'project',
+			description: 'Project routes'
 		}
 	]
 };
