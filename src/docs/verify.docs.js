@@ -45,8 +45,9 @@ export default {
 					type: 'object',
 					required: ['otp'],
 					properties: {
-						otp: { type: 'string' }
-					}
+						otp: { type: 'number' }
+					},
+					example: { otp: 567890 }
 				}
 			],
 			responses: {

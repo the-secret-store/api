@@ -16,6 +16,11 @@ export default {
 							display_name: { type: 'string' },
 							email: { type: 'string' },
 							password: { type: 'string' }
+						},
+						example: {
+							display_name: 'John Doe',
+							email: 'john@email.com',
+							password: 'Doe,John1!'
 						}
 					}
 				}

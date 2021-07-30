@@ -16,6 +16,10 @@ export default {
 						properties: {
 							email: { type: 'string' },
 							password: { type: 'string' }
+						},
+						example: {
+							email: 'john@example.com',
+							password: 'JohnDoe1!'
 						}
 					}
 				}
