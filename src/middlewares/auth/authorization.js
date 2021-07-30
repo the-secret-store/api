@@ -27,8 +27,14 @@ export default (req, res, next) => {
 	}
 
 	const token = obtainTokenFromHeader(authorization);
-	const payload = jwt.verify(token, TOKEN_PRIVATE_KEY);
-	logger.debug('Token payload: ' + prettyJson(payload));
-	req.user = payload; // has id, display_name, email, ? unverified
+
+	try {
+		const payload = jwt.verify(token, TOKEN_PRIVATE_KEY);
+		logger.debug('Token payload: ' + prettyJson(payload));
+		req.user = payload; // has id, display_name, email, ? unverified
+	} catch (err) {
+		return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Invalid token' });
+	}
+
 	next();
 };
