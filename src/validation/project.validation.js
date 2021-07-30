@@ -9,7 +9,9 @@ import JoiObjectId from './ObjectId.schema';
  */
 export default function validateProjectPostRequest(projectIdOrAppId, secrets) {
 	const schema = Joi.object({
-		projectIdOrAppId: projectIdOrAppId.includes('-') ? Joi.string().required() : JoiObjectId(),
+		projectIdOrAppId: projectIdOrAppId.includes('-')
+			? Joi.string().required()
+			: JoiObjectId().required(),
 		secrets: Joi.object().required()
 	});
 

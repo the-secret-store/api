@@ -15,7 +15,7 @@ export const acceptInvitation = async (req, res) => {
 	const { id: userId } = req.user;
 
 	// 1. validate the invitation
-	const { error } = JoiObjectId().validate(invitationId);
+	const { error } = JoiObjectId().required().validate(invitationId);
 	if (error) {
 		return res
 			.status(StatusCodes.BAD_REQUEST)
