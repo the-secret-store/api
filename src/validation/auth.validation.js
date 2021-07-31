@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import PasswordComplexity from 'joi-password-complexity';
+import { JoiComplexPassword } from './schemas';
 
 /**
  * Validates login credentials
@@ -11,15 +11,7 @@ export default function validateAuthRequest(requestBody) {
 		email: Joi.string()
 			.email({ tlds: { allow: false } })
 			.required(),
-		password: new PasswordComplexity({
-			min: 6,
-			max: 18,
-			lowerCase: 1,
-			upperCase: 1,
-			numeric: 1,
-			symbol: 1,
-			requirementCount: 4
-		}).required()
+		password: JoiComplexPassword().required()
 	});
 
 	return schema.validate(requestBody);

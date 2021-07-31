@@ -12,13 +12,13 @@
 	],
 	"scripts": {
 		"build": "babel src --out-dir build",
-		"dev": "nodemon --exec babel-node src/server.js --ignore jsconfig.json",
+		"dev": "nodemon --exec babel-node src/server.js --ignore tests/",
 		"start": "node build/server.js",
 		"format": "prettier --write \"**/*.js\"",
 		"format:check": "prettier -c \"**/*.js\"",
 		"lint": "eslint \"src/**/*.js\"",
 		"lint:fix": "npm run lint -- --fix",
-		"test": "jest --forceExit --detectOpenHandles --maxWorkers=1"
+		"test": "jest --verbose --forceExit --detectOpenHandles --maxWorkers=1"
 	},
 	"keywords": [],
 	"author": "",

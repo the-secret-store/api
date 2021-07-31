@@ -7,5 +7,5 @@ export const validUserObject1 = {
 export const validUserObject2 = {
 	display_name: 'XYZ',
 	email: 'b@email.com',
-	password: 'Password1!'
+	password: 'Password2@'
 };
