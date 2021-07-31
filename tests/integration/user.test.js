@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import { StatusCodes } from 'http-status-codes';
 import { User } from '@models';
 import { validUserObject1, validUserObject2 } from '../constants';
+import { registerUser, loginUser } from '../functions';
 
 describe('User router (/user)', () => {
 	const server = require('../../src/server');
@@ -12,21 +13,13 @@ describe('User router (/user)', () => {
 		await mongoose.connection.close();
 	});
 
-	const registerUser = async userObject => {
-		return await request(server).post('/user/register').send(userObject);
-	};
-
-	const loginUser = async credentials => {
-		return await request(server).post('/auth/login').send(credentials);
-	};
-
 	describe('Registration (POST /register)', () => {
 		beforeEach(async () => {
 			await User.deleteMany({});
 		});
 
 		it('return 200 for valid user', async () => {
-			const response = await registerUser(validUserObject1);
+			const response = await registerUser(server, validUserObject1);
 			expect(response.statusCode).toEqual(StatusCodes.OK);
 		});
 
@@ -35,7 +28,7 @@ describe('User router (/user)', () => {
 			// we don't have to test for all the validations, since unit tests take care of that
 			payload.name = 'X';
 
-			const response = await registerUser(payload);
+			const response = await registerUser(server, payload);
 			expect(response.statusCode).toEqual(StatusCodes.BAD_REQUEST);
 		});
 
@@ -43,14 +36,14 @@ describe('User router (/user)', () => {
 			const payload = { ...validUserObject1 };
 			delete payload.email;
 
-			const response = await registerUser(payload);
+			const response = await registerUser(server, payload);
 			expect(response.statusCode).toEqual(StatusCodes.BAD_REQUEST);
 		});
 
 		it('should throw 400 for duplication', async () => {
-			await registerUser(validUserObject1);
+			await registerUser(server, validUserObject1);
 
-			const response = await registerUser(validUserObject1);
+			const response = await registerUser(server, validUserObject1);
 			expect(response.statusCode).toEqual(StatusCodes.BAD_REQUEST);
 		});
 	});
@@ -60,8 +53,8 @@ describe('User router (/user)', () => {
 		let validToken;
 
 		beforeAll(async () => {
-			await registerUser(validUserObject1);
-			validToken = (await loginUser({ email, password })).body.token;
+			await registerUser(server, validUserObject1);
+			validToken = (await loginUser(server, { email, password })).body.token;
 		});
 
 		/**
