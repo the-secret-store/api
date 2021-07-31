@@ -1,7 +1,7 @@
 import { validateAuthRequest } from '@validation';
 import { validUserObject1 } from '../constants/user.constant';
 
-describe('Joi validations - auth', () => {
+describe('Auth validations', () => {
 	it('should throw error for invalid email', () => {
 		const { error } = validateAuthRequest({
 			email: 'invalid',
