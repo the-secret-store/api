@@ -1,4 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
+import config from 'config';
 import { OTP, User } from '@models';
 import { logger } from '@tools';
 import { generateOTP, sendMail } from '@utilities';
@@ -42,6 +43,9 @@ export const sendOTP = async (req, res) => {
 			`Your verification code is: ${otp}`
 		);
 		logger.debug('Email sent');
+		if (config.util.getEnv('NODE_ENV') === 'test') {
+			res.status(StatusCodes.OK).json({ otp });
+		}
 		res.status(StatusCodes.OK).json({ message: 'Verification code sent successfully' });
 	} catch (err) {
 		// if there was an error, delete the saved otp document
