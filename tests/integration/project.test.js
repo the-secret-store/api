@@ -82,7 +82,6 @@ describe('Project routes (/project)', () => {
 		it('should respond 200 if details are valid', async () => {
 			const res = await createProject(server, token1, validProject1(user1));
 			expect(res.statusCode).toEqual(StatusCodes.CREATED);
-			console.log(res.body);
 			projectId = res.body.data.id;
 			appId = res.body.data.app_id;
 		});
@@ -129,6 +128,25 @@ describe('Project routes (/project)', () => {
 				secret2: 'this-is-also-a-secret'
 			});
 			expect(res.statusCode).toEqual(StatusCodes.OK);
+		});
+
+		it('should have a backup of old secrets', async () => {
+			const res = await postSecrets(server, token1, projectId, {
+				secret: 'this-is-a-secret'
+			});
+			expect(res.statusCode).toEqual(StatusCodes.OK);
+			expect(res.body.data.backup).toHaveProperty('secret2', 'this-is-also-a-secret');
+		});
+
+		it('should post secrets and send back the same', async () => {
+			const res = await postSecrets(server, token1, projectId, {
+				secret: 'this-is-a-secret',
+				secret2: 'this-is-also-a-secret'
+			});
+			expect(res.body.data).toHaveProperty('secrets', {
+				secret: 'this-is-a-secret',
+				secret2: 'this-is-also-a-secret'
+			});
 		});
 	});
 });

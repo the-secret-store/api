@@ -25,7 +25,7 @@ export const postSecrets = (server, authToken, projectIdOrAppId, secrets) => {
 	return request(server)
 		.post(`/project/${projectIdOrAppId}/post`)
 		.set('Authorization', `Bearer ${authToken}`)
-		.send(secrets);
+		.send({ secrets });
 };
 
 /**

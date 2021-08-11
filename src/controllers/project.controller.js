@@ -111,7 +111,7 @@ export const postSecrets = async (req, res) => {
 
 	// 3. post the secrets
 	try {
-		if (JSON.stringify(project.secrets) === JSON.stringify(secrets)) {
+		if (JSON.stringify(project.secrets) == JSON.stringify(secrets)) {
 			return res
 				.status(StatusCodes.OK)
 				.json({ message: 'Already up-to-date', data: { secrets, backup: project.backup } });
@@ -120,7 +120,7 @@ export const postSecrets = async (req, res) => {
 		project.backup = project.secrets;
 		project.secrets = secrets;
 		project.lastUpdatedBy = req.user.id;
-		project.save();
+		await project.save();
 
 		res
 			.status(StatusCodes.OK)
