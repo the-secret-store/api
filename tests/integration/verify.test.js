@@ -2,8 +2,8 @@ import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import { StatusCodes } from 'http-status-codes';
 import { OTP, User } from '@models';
-import { getOTP, loginUser, registerUser, verifyUser } from '../functions/index';
 import { validUserObject1 } from '../constants';
+import { getOTP, loginUser, registerUser, verifyUser } from '../functions';
 
 describe('Verification routes (/verify)', () => {
 	const server = require('../../src/server');
@@ -23,6 +23,7 @@ describe('Verification routes (/verify)', () => {
 	});
 
 	afterAll(async () => {
+		await OTP.deleteMany();
 		await server.close();
 		await mongoose.connection.close();
 	});
