@@ -1,4 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
+import config from 'config';
 import { OTP, User } from '@models';
 import { logger } from '@tools';
 import { generateOTP, sendMail } from '@utilities';
@@ -42,6 +43,11 @@ export const sendOTP = async (req, res) => {
 			`Your verification code is: ${otp}`
 		);
 		logger.debug('Email sent');
+		if (config.util.getEnv('NODE_ENV') === 'test') {
+			return res
+				.status(StatusCodes.OK)
+				.json({ otp, message: 'Verification code sent successfully' });
+		}
 		res.status(StatusCodes.OK).json({ message: 'Verification code sent successfully' });
 	} catch (err) {
 		// if there was an error, delete the saved otp document
@@ -69,7 +75,7 @@ export const verifyAccount = async (req, res) => {
 	const { otp } = req.body;
 
 	// 2. check the otp
-	if (otp.toString().length !== 6) {
+	if (!otp || otp.toString().length !== 6) {
 		return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid verification code' });
 	}
 	const result = await OTP.findOne({ character_id });

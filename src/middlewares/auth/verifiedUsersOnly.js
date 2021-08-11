@@ -1,20 +1,18 @@
 import { StatusCodes } from 'http-status-codes';
 
 /**
- * A middleware that forbids unverified accounts from accessing secure routes
+ * A middleware that forbids (403) unverified accounts from accessing secure routes
  * @pre-requisite: authorize middleware
  */
 export default (req, res, next) => {
 	//* use authorization middleware
 	const { unverified } = req.user;
 	if (unverified) {
-		return res
-			.status(StatusCodes.FORBIDDEN)
-			.json({
-				message: 'Your account needs to be verified to perform this action',
-				extendedMessage:
-					'If you have verified your account and yet seeing this message, please try logging out and logging in again.'
-			});
+		return res.status(StatusCodes.FORBIDDEN).json({
+			message: 'Your account needs to be verified to perform this action',
+			extendedMessage:
+				'If you have verified your account and yet seeing this message, please try logging out and logging in again.'
+		});
 	}
 	next();
 };

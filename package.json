@@ -10,6 +10,7 @@
 		"SMTP_EMAIL",
 		"SMTP_PASSWORD"
 	],
+	"testEnvironment": "node",
 	"scripts": {
 		"build": "babel src --out-dir build",
 		"dev": "nodemon --exec babel-node src/server.js --ignore tests/",
