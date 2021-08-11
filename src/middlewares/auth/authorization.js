@@ -16,7 +16,7 @@ function obtainTokenFromHeader(authHeader) {
 }
 
 /**
- * Allows only authenticated users to access routes
+ * Allows only (401) authenticated users to access routes
  * @requires jwt on auth header in BEARER <token> format
  * @mounts user object onto req object
  */

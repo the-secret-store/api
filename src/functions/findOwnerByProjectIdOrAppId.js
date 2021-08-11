@@ -8,10 +8,14 @@ import { prettyJson } from '@utilities';
  * @returns {object} Project owner document
  */
 export default async function findOwnerByProjectIdOrAppId(projectIdOrAppId) {
-	const project = await (projectIdOrAppId.includes('-')
-		? Project.findOne({ app_id: projectIdOrAppId })
-		: Project.findById(projectIdOrAppId));
-
+	let project;
+	try {
+		project = await (projectIdOrAppId.includes('-')
+			? Project.findOne({ app_id: projectIdOrAppId })
+			: Project.findById(projectIdOrAppId));
+	} catch (ex) {
+		return { project: undefined };
+	}
 	logger.debug('Project: ' + prettyJson(project));
 
 	const owner = (await User.findById(project.owner)) || (await Team.findById(project.owner));
