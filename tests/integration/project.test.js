@@ -172,7 +172,6 @@ describe('Project routes (/project)', () => {
 		it('should accept if the user privileged', async () => {
 			const res = await fetchSecrets(server, token1, appId);
 			expect(res.statusCode).toEqual(StatusCodes.OK);
-			console.log(res.body.data);
 			expect(res.body.data).toHaveProperty('secrets', secretsW2);
 			expect(res.body.data).toHaveProperty('backup');
 		});
