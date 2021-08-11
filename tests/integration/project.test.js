@@ -8,15 +8,25 @@ import {
 	registerUser,
 	verifyUser,
 	createProject,
-	postSecrets
+	postSecrets,
+	fetchSecrets
 } from '../functions';
 import { validUserObject1, validUserObject2, validProject1 } from '../constants';
 
 describe('Project routes (/project)', () => {
 	const server = require('../../src/server');
-	let token1, token2;
+	let token1, token2, token3;
 	let user1, user2;
 	let projectId, appId;
+
+	const secretsW2 = {
+		secret: 'this-is-a-secret',
+		secret2: 'this-is-also-a-secret'
+	};
+
+	const secretsW1 = {
+		secret: 'this-is-a-secret'
+	};
 
 	beforeAll(async () => {
 		await User.deleteMany();
@@ -106,7 +116,7 @@ describe('Project routes (/project)', () => {
 			await verifyUser(server, token2, otp);
 
 			// login again and fetch verified token
-			let token3 = (
+			token3 = (
 				await loginUser(server, {
 					email: validUserObject2.email,
 					password: validUserObject2.password
@@ -118,35 +128,60 @@ describe('Project routes (/project)', () => {
 		});
 
 		it('should accept if the user privileged', async () => {
-			const res = await postSecrets(server, token1, appId, { secret: 'this-is-a-secret' });
+			const res = await postSecrets(server, token1, appId, secretsW1);
 			expect(res.statusCode).toEqual(StatusCodes.OK);
 		});
 
 		it('should also work with projectId', async () => {
-			const res = await postSecrets(server, token1, projectId, {
-				secret: 'this-is-a-secret',
-				secret2: 'this-is-also-a-secret'
-			});
+			const res = await postSecrets(server, token1, projectId, secretsW2);
 			expect(res.statusCode).toEqual(StatusCodes.OK);
 		});
 
 		it('should have a backup of old secrets', async () => {
 			const res = await postSecrets(server, token1, projectId, {
-				secret: 'this-is-a-secret'
+				secret: secretsW2.secret
 			});
 			expect(res.statusCode).toEqual(StatusCodes.OK);
-			expect(res.body.data.backup).toHaveProperty('secret2', 'this-is-also-a-secret');
+			expect(res.body.data.backup).toHaveProperty('secret2', secretsW2.secret2);
 		});
 
 		it('should post secrets and send back the same', async () => {
-			const res = await postSecrets(server, token1, projectId, {
-				secret: 'this-is-a-secret',
-				secret2: 'this-is-also-a-secret'
-			});
-			expect(res.body.data).toHaveProperty('secrets', {
-				secret: 'this-is-a-secret',
-				secret2: 'this-is-also-a-secret'
-			});
+			const res = await postSecrets(server, token1, projectId, secretsW2);
+			expect(res.body.data).toHaveProperty('secrets', secretsW2);
+		});
+	});
+
+	describe('fetch secrets (get /:id/fetch', () => {
+		it('should throw 401 if the user is not logged in', async () => {
+			// user 2 is not verified & is not a does not have access to the project
+			const res = await fetchSecrets(server, undefined, appId);
+			expect(res.statusCode).toEqual(StatusCodes.UNAUTHORIZED);
+		});
+
+		it('should throw 403 if the user is not verified', async () => {
+			// user 2 is not verified & is not a does not have access to the project
+			const res = await fetchSecrets(server, token2, appId);
+			expect(res.statusCode).toEqual(StatusCodes.FORBIDDEN);
+		});
+
+		it('should throw 403 if the user is not privileged', async () => {
+			const res = await fetchSecrets(server, token3, appId);
+			expect(res.statusCode).toEqual(StatusCodes.FORBIDDEN);
+		});
+
+		it('should accept if the user privileged', async () => {
+			const res = await fetchSecrets(server, token1, appId);
+			expect(res.statusCode).toEqual(StatusCodes.OK);
+			console.log(res.body.data);
+			expect(res.body.data).toHaveProperty('secrets', secretsW2);
+			expect(res.body.data).toHaveProperty('backup');
+		});
+
+		it('should also work with projectId', async () => {
+			const res = await fetchSecrets(server, token1, projectId);
+			expect(res.statusCode).toEqual(StatusCodes.OK);
+			expect(res.body.data).toHaveProperty('secrets', secretsW2);
+			expect(res.body.data).toHaveProperty('backup');
 		});
 	});
 });
