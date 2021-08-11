@@ -44,7 +44,9 @@ export const sendOTP = async (req, res) => {
 		);
 		logger.debug('Email sent');
 		if (config.util.getEnv('NODE_ENV') === 'test') {
-			res.status(StatusCodes.OK).json({ otp });
+			return res
+				.status(StatusCodes.OK)
+				.json({ otp, message: 'Verification code sent successfully' });
 		}
 		res.status(StatusCodes.OK).json({ message: 'Verification code sent successfully' });
 	} catch (err) {
@@ -73,7 +75,7 @@ export const verifyAccount = async (req, res) => {
 	const { otp } = req.body;
 
 	// 2. check the otp
-	if (otp.toString().length !== 6) {
+	if (!otp || otp.toString().length !== 6) {
 		return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid verification code' });
 	}
 	const result = await OTP.findOne({ character_id });
