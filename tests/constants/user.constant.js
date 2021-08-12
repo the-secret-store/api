@@ -9,3 +9,9 @@ export const validUserObject2 = {
 	email: 'b@email.com',
 	password: 'Password2@'
 };
+
+export const validUserObject3 = {
+	display_name: 'MNO',
+	email: 'mno@email.com',
+	password: 'Password3@'
+};

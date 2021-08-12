@@ -24,11 +24,11 @@ export const createTeam = async (req, res) => {
 	logger.debug(`Acknowledged: ${prettyJson({ team_name, owner })}`);
 
 	// 1. validate the request
-	const { errors } = validateTeam({ team_name, owner });
-	if (errors) {
+	const { error } = validateTeam({ team_name, owner });
+	if (error) {
 		return res
 			.status(StatusCodes.BAD_REQUEST)
-			.json({ message: errors.details[0].message, details: errors });
+			.json({ message: error.details[0].message, details: error });
 	}
 
 	// 2. check if the team already exists under the same owner
@@ -76,6 +76,10 @@ export const inviteUser = async (req, res) => {
 	const { user_email } = req.body;
 	const { team_name, members, admins } = req.team; //mounted by middleware
 
+	logger.debug(
+		`Inviting user: ${prettyJson({ user_email, teamId, display_name, invitingUserId })}`
+	);
+
 	// 1. validate the invite request
 	const { invitedUser, error } = await validateTeamInvite({ teamId, user_email });
 	if (error) {
@@ -112,7 +116,9 @@ export const inviteUser = async (req, res) => {
 		{{baseUrl}}/invitation/${invitation._doc._id}/accept`
 		);
 
-		res.status(StatusCodes.OK).json({ message: 'Invitation sent successfully' });
+		res
+			.status(StatusCodes.OK)
+			.json({ message: 'Invitation sent successfully', data: { invitationId: invitation._id } });
 	} catch (exp) {
 		await Invitation.findByIdAndDelete(invitation._doc._id);
 		res

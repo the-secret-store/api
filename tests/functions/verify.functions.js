@@ -1,4 +1,5 @@
 import request from 'supertest';
+import { loginUser } from './user.functions';
 
 /**
  * @param {string} authToken JWT token
@@ -16,4 +17,13 @@ export const verifyUser = async (server, authToken, otp) => {
 		.post('/verify/check')
 		.set('Authorization', `Bearer ${authToken}`)
 		.send({ otp });
+};
+
+export const fullVerify = async (server, authToken, email, password) => {
+	const otpRes = await getOTP(server, authToken);
+	const { otp } = otpRes.body;
+	await verifyUser(server, authToken, otp);
+
+	const lR = await loginUser(server, { email, password });
+	return lR.body.token;
 };
