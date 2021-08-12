@@ -116,7 +116,9 @@ export const inviteUser = async (req, res) => {
 		{{baseUrl}}/invitation/${invitation._doc._id}/accept`
 		);
 
-		res.status(StatusCodes.OK).json({ message: 'Invitation sent successfully' });
+		res
+			.status(StatusCodes.OK)
+			.json({ message: 'Invitation sent successfully', data: { invitationId: invitation._id } });
 	} catch (exp) {
 		await Invitation.findByIdAndDelete(invitation._doc._id);
 		res
