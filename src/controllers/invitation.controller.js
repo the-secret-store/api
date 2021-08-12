@@ -11,6 +11,7 @@ import { JoiObjectId } from '@validation';
  */
 
 export const acceptInvitation = async (req, res) => {
+	// uses authorize and verifiedUsers only middlewares
 	const { invitationId } = req.params;
 	const { id: userId } = req.user;
 
@@ -45,5 +46,7 @@ export const acceptInvitation = async (req, res) => {
 	// 4. remove the invitation
 	await Invitation.findByIdAndDelete(invitationId);
 
-	res.status(StatusCodes.OK).json({ message: 'Invitation accepted' });
+	res
+		.status(StatusCodes.OK)
+		.json({ message: 'Invitation accepted', data: { teamId: invitation.invited_to } });
 };

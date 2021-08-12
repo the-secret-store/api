@@ -4,6 +4,7 @@ export default {
 		{ name: 'project', description: 'Project routes' },
 		{ name: 'team', description: 'Team routes' },
 		{ name: 'user', description: 'User routes' },
-		{ name: 'verify', description: 'Verification routes' }
+		{ name: 'verify', description: 'Verification routes' },
+		{ name: 'invitation', description: 'Invitation routes' }
 	]
 };

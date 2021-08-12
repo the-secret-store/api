@@ -85,8 +85,14 @@ export default {
 				400: {
 					description: 'Bad request'
 				},
+				401: {
+					description: 'Not authorized'
+				},
 				403: {
 					description: 'Forbidden: not enough privileges'
+				},
+				409: {
+					description: 'User was already invited'
 				}
 			}
 		}
