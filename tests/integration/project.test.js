@@ -95,6 +95,11 @@ describe('Project routes (/project)', () => {
 			projectId = res.body.data.id;
 			appId = res.body.data.app_id;
 		});
+
+		it('should respond 409 if project already exist', async () => {
+			const res = await createProject(server, token1, validProject1(user1));
+			expect(res.statusCode).toEqual(StatusCodes.CONFLICT);
+		});
 	});
 
 	describe('post secrets (post /:id/post', () => {

@@ -35,7 +35,7 @@ export const createProject = async (req, res) => {
 
 	// 2ii. check if the project already exists
 	if (await Project.findOne({ project_name, owner })) {
-		return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Project already exists' });
+		return res.status(StatusCodes.CONFLICT).json({ message: 'Project already exists' });
 	}
 
 	// 2p. check if the owner has reached no of projects limit
