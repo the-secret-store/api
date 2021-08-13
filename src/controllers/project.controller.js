@@ -99,12 +99,12 @@ export const postSecrets = async (req, res) => {
 	logger.debug(`Acknowledged secrets of ${projectIdOrAppId}: ${prettyJson(secrets)}`);
 
 	// 1. validate the request
-	const { errors } = validateProjectPostRequest(projectIdOrAppId, secrets);
+	const { error } = validateProjectPostRequest(projectIdOrAppId, secrets);
 
-	if (errors) {
+	if (error) {
 		return res
 			.status(StatusCodes.BAD_REQUEST)
-			.json({ message: errors.details[0].message, details: errors });
+			.json({ message: error.details[0].message, details: error });
 	}
 
 	// todo: 2. hash the secrets
