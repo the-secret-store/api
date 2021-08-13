@@ -13,6 +13,8 @@ export default async function validateTeamInvite({ teamId, user_email }) {
 	let { error } = Joi.object({
 		teamId: JoiObjectId().required(),
 		user_email: Joi.string()
+			.min(6)
+			.max(100)
 			.email({ tlds: { allow: false } })
 			.required()
 	}).validate({ teamId, user_email });

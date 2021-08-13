@@ -5,7 +5,7 @@ import { JoiObjectId } from '@validation';
 
 const ProjectSchema = new Schema(
 	{
-		project_name: { type: String, required: true, trim: true },
+		project_name: { type: String, required: true, trim: true, minlength: 3, maxlength: 50 },
 		app_id: { type: String, default: generateRandomName, unique: true },
 		scope: { type: String, enum: ['private', 'public'], required: true },
 		backup: { type: Schema.Types.Mixed, default: {} },
@@ -28,7 +28,7 @@ export default model('project', ProjectSchema);
 
 export const validateProject = projectObject => {
 	const schema = Joi.object({
-		project_name: Joi.string().required(),
+		project_name: Joi.string().min(3).max(50).required(),
 		owner: JoiObjectId().required(),
 		scope: Joi.string().required().valid('private', 'public')
 	});

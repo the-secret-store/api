@@ -8,7 +8,7 @@ function insertOwner() {
 
 const TeamSchema = new Schema(
 	{
-		team_name: { type: String, required: true, trim: true },
+		team_name: { type: String, required: true, trim: true, minlength: 3, maxlength: 50 },
 		owner: { type: Types.ObjectId, ref: 'user' },
 		admins: { type: [{ type: Types.ObjectId, ref: 'user' }], default: insertOwner },
 		members: { type: [{ type: Types.ObjectId, ref: 'user' }] },
@@ -29,7 +29,7 @@ export default model('team', TeamSchema);
 
 export const validateTeam = teamObject => {
 	const schema = Joi.object({
-		team_name: Joi.string().required(),
+		team_name: Joi.string().min(3).max(50).required(),
 		owner: JoiObjectId().required(),
 		visibility: Joi.string().valid('private', 'public')
 	});

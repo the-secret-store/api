@@ -10,7 +10,7 @@ import { JoiObjectId } from './schemas';
 export default function validateProjectPostRequest(projectIdOrAppId, secrets) {
 	const schema = Joi.object({
 		projectIdOrAppId: projectIdOrAppId?.toString().includes('-')
-			? Joi.string().required()
+			? Joi.string().min(12).required() // has hex string of length 6, 2 '-'s
 			: JoiObjectId().required(),
 		secrets: Joi.object().required()
 	});

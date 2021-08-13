@@ -9,6 +9,8 @@ import { JoiComplexPassword } from './schemas';
 export default function validateAuthRequest(requestBody) {
 	const schema = Joi.object({
 		email: Joi.string()
+			.min(6)
+			.max(100)
 			.email({ tlds: { allow: false } })
 			.required(),
 		password: JoiComplexPassword().required()
