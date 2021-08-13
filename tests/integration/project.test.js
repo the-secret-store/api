@@ -9,9 +9,13 @@ import {
 	verifyUser,
 	createProject,
 	postSecrets,
-	fetchSecrets
+	fetchSecrets,
+	createTeam,
+	fullVerify,
+	inviteToTeam,
+	acceptInvitation
 } from '../functions';
-import { validUserObject1, validUserObject2, validProject1 } from '../constants';
+import { validUserObject1, validUserObject2, validProject1, validTeam1 } from '../constants';
 
 describe('Project routes (/project)', () => {
 	const server = require('../../src/server');
@@ -102,7 +106,7 @@ describe('Project routes (/project)', () => {
 		});
 	});
 
-	describe('post secrets (post /:id/post', () => {
+	describe('post secrets (post /:id/post)', () => {
 		it('should throw 401 if the user is not logged in', async () => {
 			// user 2 is not verified & is not a does not have access to the project
 			const res = await postSecrets(server, undefined, appId, {});
@@ -156,7 +160,7 @@ describe('Project routes (/project)', () => {
 		});
 	});
 
-	describe('fetch secrets (get /:id/fetch', () => {
+	describe('fetch secrets (get /:id/fetch)', () => {
 		it('should throw 401 if the user is not logged in', async () => {
 			// user 2 is not verified & is not a does not have access to the project
 			const res = await fetchSecrets(server, undefined, appId);
@@ -187,5 +191,58 @@ describe('Project routes (/project)', () => {
 			expect(res.body.data).toHaveProperty('secrets', secretsW2);
 			expect(res.body.data).toHaveProperty('backup');
 		});
+	});
+
+	describe('projects belonging to a team', () => {
+		let teamId;
+		let projectId, appId;
+		let verifiedToken2;
+
+		beforeAll(async () => {
+			teamId = (await createTeam(server, token1, validTeam1(user1))).body.data._id;
+			const resBody = (await createProject(server, token1, validProject1(teamId))).body;
+			projectId = resBody.data.id;
+			appId = resBody.data.app_id;
+		});
+
+		it('should respond 200 for both fetch and post from admin/owner', async () => {
+			let res = await postSecrets(server, token1, projectId, { secret: 'this-is-a-secret' });
+			expect(res.statusCode).toEqual(StatusCodes.OK);
+			res = await fetchSecrets(server, token1, appId);
+			expect(res.statusCode).toEqual(StatusCodes.OK);
+		});
+
+		it('should forbid users that does not belong to the team', async () => {
+			let res = await fetchSecrets(server, token2, appId);
+			expect(res.statusCode).toEqual(StatusCodes.FORBIDDEN);
+			res = await postSecrets(server, token2, projectId, { secret2: 'this-is-also-secret' });
+			expect(res.statusCode).toEqual(StatusCodes.FORBIDDEN);
+		});
+
+		async function joinNewMember() {
+			verifiedToken2 = await fullVerify(
+				server,
+				token2,
+				validUserObject2.email,
+				validUserObject2.password
+			);
+			const { invitationId } = (await inviteToTeam(server, token1, teamId, validUserObject2.email))
+				.body.data;
+			await acceptInvitation(server, verifiedToken2, invitationId);
+		}
+
+		it('should allow non-admins to fetch', async () => {
+			await joinNewMember();
+			const res = await fetchSecrets(server, verifiedToken2, appId);
+			expect(res.statusCode).toEqual(StatusCodes.OK);
+		});
+
+		// currently we allow members to post secrets
+		/*
+		it('should forbid non-admins from posting', async () => {
+			const res = await postSecrets(server, verifiedToken2, appId, { test: 'test-secret' });
+			expect(res.statusCode).toEqual(StatusCodes.FORBIDDEN);
+		});
+		*/
 	});
 });
