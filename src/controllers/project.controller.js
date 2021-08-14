@@ -1,14 +1,14 @@
 import { StatusCodes } from 'http-status-codes';
 import config from 'config';
 import { logger } from '@tools';
-import { Project, Team, User } from '@models';
+import { Project, SpecialAccessToken, Team, User } from '@models';
 import { prettyJson } from '@utilities';
 import { validateProject, validateProjectPostRequest } from '@validation';
 
 /**
  * Controller for /project
  *
- * Available controllers: createProject, postSecrets, fetchSecrets
+ * Available controllers: createProject, postSecrets, fetchSecrets, addSpecialAccessToken
  */
 
 /**
@@ -149,4 +149,33 @@ export const fetchSecrets = async (req, res) => {
 
 	// todo: decrypt
 	res.status(StatusCodes.OK).json({ message: 'Fetched', data: { app_id, secrets, backup } });
+};
+
+/**
+ * Controller for /post/:projectIdOrAppId/addSAT
+ */
+export const addSpecialAccessToken = async (req, res) => {
+	//* use authorization, verifiedUsersOnly and privilegedUsersOnly middlewares
+	const { project, user } = req; // the document from db
+
+	logger.debug(
+		`Project: Add SAT | Ack: ${prettyJson({ toProject: project, userPerformingOp: user })}`
+	);
+
+	// create the token
+	const {
+		_doc: { _id: satId }
+	} = await new SpecialAccessToken({
+		created_by: user.id,
+		to: project.id
+	}).save();
+
+	// push it to list of tokens
+	project.special_access_tokens.push(satId);
+	await project.save();
+
+	res.status(StatusCodes.CREATED).json({
+		message: 'Special Access Token created successfully',
+		data: { token: satId, projectId: project.id }
+	});
 };
