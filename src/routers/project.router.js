@@ -5,7 +5,7 @@ import { authorize, privilegedUsersOnly, verifiedUsersOnly } from '@middlewares'
 /**
  * Router for /projects
  *
- * Available routes: /create, /:id/post
+ * Available routes: /create, /:id/post, /:id/fetch, /:id/addSAT
  */
 
 const router = Router();
@@ -26,6 +26,14 @@ router.get(
 	verifiedUsersOnly,
 	privilegedUsersOnly,
 	ProjectController.fetchSecrets
+);
+
+router.post(
+	'/:projectIdOrAppId/addSat',
+	authorize,
+	verifiedUsersOnly,
+	privilegedUsersOnly,
+	ProjectController.addSpecialAccessToken
 );
 
 export default router;
