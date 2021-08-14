@@ -13,7 +13,10 @@ const ProjectSchema = new Schema(
 		lastUpdatedBy: { type: Schema.Types.ObjectId, ref: 'user' },
 		owner: { type: Schema.Types.ObjectId, required: true, refPath: 'ownerModel' },
 		ownerModel: { type: String, enums: ['user', 'team'] },
-		special_access_tokens: [{ type: Schema.types.ObjectId, ref: 'specialAccessToken' }]
+		special_access_tokens: {
+			type: [{ type: Schema.Types.ObjectId, ref: 'specialAccessToken' }],
+			default: []
+		}
 	},
 	{ timestamps: true }
 );
