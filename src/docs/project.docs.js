@@ -136,5 +136,32 @@ export default {
 				}
 			}
 		}
+	},
+	'/project/{projectIdOrAppId}/addSat': {
+		post: {
+			summary: 'Create a special access token',
+			description: 'Add a special access token to the project',
+			tags: ['project'],
+			consumes: 'application/json',
+			produces: 'application/json',
+			parameters: [AuthHeader, ProjectOrAppIdParam],
+			responses: {
+				200: {
+					description: 'The Special Access Token was created successfully'
+				},
+				400: {
+					description: 'Request error'
+				},
+				403: {
+					description: 'Forbidden: not enough privileges to perform the operation'
+				},
+				404: {
+					description: 'Not found: the project was not found'
+				},
+				500: {
+					description: 'Internal Server Error'
+				}
+			}
+		}
 	}
 };
