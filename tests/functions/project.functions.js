@@ -23,7 +23,7 @@ export const createProject = async (server, authToken, projectDetails) => {
  */
 export const postSecrets = (server, authToken, projectIdOrAppId, secrets) => {
 	return request(server)
-		.post(`/project/${projectIdOrAppId}/post`)
+		.put(`/project/${projectIdOrAppId}/post`)
 		.set('Authorization', `Bearer ${authToken}`)
 		.send({ secrets });
 };

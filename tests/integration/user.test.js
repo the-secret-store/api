@@ -48,7 +48,7 @@ describe('User router (/user)', () => {
 		});
 	});
 
-	describe('Password change (POST /changePassword)', () => {
+	describe('Password change (PUT /changePassword)', () => {
 		const { email, password } = validUserObject1;
 		let validToken;
 
@@ -68,7 +68,7 @@ describe('User router (/user)', () => {
 		 */
 		const changePassword = (passwordChangeReqParams, authToken) => {
 			return request(server)
-				.post('/user/changePassword')
+				.put('/user/changePassword')
 				.send(passwordChangeReqParams)
 				.set('Authorization', 'Bearer ' + authToken);
 		};
