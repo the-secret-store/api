@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 import { findOwnerByProjectIdOrAppId } from '@functions';
-import { logger } from '@tools/';
+import { logger } from '@tools';
 import prettyJson from '@utilities/prettyJson';
 
 /**
@@ -15,7 +15,7 @@ export default async (req, res, next) => {
 	const { projectIdOrAppId } = req.params;
 	const { user } = req;
 
-	logger.debug('(PrevUsersOnly) | Ack : ' + prettyJson(req.params));
+	logger.silly('Middleware(PrevUsersOnly) | Ack : ' + prettyJson(req.params));
 
 	const { project, owner } = await findOwnerByProjectIdOrAppId(projectIdOrAppId);
 

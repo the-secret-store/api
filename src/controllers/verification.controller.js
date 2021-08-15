@@ -77,7 +77,7 @@ export const verifyAccount = async (req, res) => {
 	const { id: character_id } = req.user;
 	const { otp } = req.body;
 
-	logger.silly(`Controller(verification, verify) Ack: ${prettyJson({ character_id, otp })}`);
+	logger.silly(`Controller(verification, verify) | Ack: ${prettyJson({ character_id, otp })}`);
 
 	// 2. check the otp
 	if (!otp || otp.toString().length !== 6) {
