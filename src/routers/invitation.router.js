@@ -10,7 +10,7 @@ import { authorize, verifiedUsersOnly } from '@middlewares';
 
 const router = Router();
 
-router.get(
+router.put(
 	'/:invitationId/accept',
 	authorize,
 	verifiedUsersOnly,

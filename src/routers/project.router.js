@@ -12,7 +12,7 @@ const router = Router();
 
 router.post('/create', authorize, verifiedUsersOnly, ProjectController.createProject);
 
-router.post(
+router.put(
 	'/:projectIdOrAppId/post',
 	authorize,
 	verifiedUsersOnly,
@@ -29,7 +29,7 @@ router.get(
 	ProjectController.fetchSecrets
 );
 
-router.post(
+router.patch(
 	'/:projectIdOrAppId/addSat',
 	authorize,
 	verifiedUsersOnly,

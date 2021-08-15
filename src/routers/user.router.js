@@ -11,6 +11,6 @@ const router = Router();
  */
 
 router.post('/register', UserController.registerUser);
-router.post('/changePassword', authorize, UserController.changePassword);
+router.put('/changePassword', authorize, UserController.changePassword);
 
 export default router;

@@ -33,6 +33,6 @@ export const inviteToTeam = async (server, authToken, teamId, invitedUser) => {
  */
 export const acceptInvitation = async (server, authToken, invitationId) => {
 	return request(server)
-		.get(`/invitation/${invitationId}/accept`)
+		.put(`/invitation/${invitationId}/accept`)
 		.set('Authorization', `Bearer ${authToken}`);
 };

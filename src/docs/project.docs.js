@@ -98,7 +98,7 @@ export default {
 		}
 	},
 	'/project/{projectIdOrAppId}/post': {
-		post: {
+		put: {
 			summary: 'Post a secret to a project',
 			description: 'Update the secrets of a project',
 			tags: ['project'],
@@ -152,7 +152,7 @@ export default {
 		}
 	},
 	'/project/{projectIdOrAppId}/addSat': {
-		post: {
+		patch: {
 			summary: 'Create a special access token',
 			description: 'Add a special access token to the project',
 			tags: ['project'],
