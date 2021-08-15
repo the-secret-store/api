@@ -1,5 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 import { Team } from '@models';
+import { logger } from '@tools';
 
 /**
  * A middleware that forbids non-admin users of a team
@@ -10,6 +11,8 @@ export default async (req, res, next) => {
 	//* use authorization and verifiedAccountsOnly middlewares
 	const { teamId } = req.params;
 	const { user } = req;
+
+	logger.silly('Middleware(teamAdminsOnly)');
 
 	const team = await Team.findById(teamId);
 	if (!team) {

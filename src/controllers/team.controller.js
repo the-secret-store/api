@@ -1,5 +1,5 @@
-import { StatusCodes } from 'http-status-codes';
 import config from 'config';
+import { StatusCodes } from 'http-status-codes';
 import { Invitation, Team, User, validateTeam } from '@models';
 import { logger } from '@tools';
 import { prettyJson, sendMail } from '@utilities';
@@ -21,11 +21,12 @@ export const createTeam = async (req, res) => {
 	const { team_name } = req.body;
 	const { id: owner } = req.user;
 
-	logger.debug(`Acknowledged: ${prettyJson({ team_name, owner })}`);
+	logger.silly(`Controller(team, create) | Ack: ${prettyJson({ team_name, owner })}`);
 
 	// 1. validate the request
 	const { error } = validateTeam({ team_name, owner });
 	if (error) {
+		logger.debug(prettyJson(error));
 		return res
 			.status(StatusCodes.BAD_REQUEST)
 			.json({ message: error.details[0].message, details: error });
@@ -76,13 +77,19 @@ export const inviteUser = async (req, res) => {
 	const { user_email } = req.body;
 	const { team_name, members, admins } = req.team; //mounted by middleware
 
-	logger.debug(
-		`Inviting user: ${prettyJson({ user_email, teamId, display_name, invitingUserId })}`
+	logger.silly(
+		`Controller(team, invite) | Ack: ${prettyJson({
+			user_email,
+			teamId,
+			display_name,
+			invitingUserId
+		})}`
 	);
 
 	// 1. validate the invite request
 	const { invitedUser, error } = await validateTeamInvite({ teamId, user_email });
 	if (error) {
+		logger.debug(prettyJson(error));
 		return res
 			.status(StatusCodes.BAD_REQUEST)
 			.json({ message: error.details[0].message, details: error.details });

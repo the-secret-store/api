@@ -8,7 +8,7 @@ import { validatePasswordChange } from '@validation';
 /**
  * Controller for /user
  *
- * Available controllers: registerUser
+ * Available controllers: registerUser, changePassword
  */
 
 const SALT_ROUNDS = 5;
@@ -23,7 +23,7 @@ const SALT_ROUNDS = 5;
  */
 export const registerUser = async (req, res) => {
 	const { body } = req;
-	logger.debug('Acknowledged: ' + prettyJson(body));
+	logger.silly('Controller(user, register) | Ack: ' + prettyJson(body));
 
 	try {
 		// 1. validate the user object
@@ -46,7 +46,6 @@ export const registerUser = async (req, res) => {
 			_doc: { password, __v, ...userDoc }
 		} = await theNewUser.save();
 
-		logger.debug('Registration successful.');
 		return res.status(StatusCodes.OK).json({ message: 'Successfully registered', data: userDoc });
 	} catch (err) {
 		// MongoError: Unique key violation
@@ -59,7 +58,7 @@ export const registerUser = async (req, res) => {
 
 		// Probably some other error (i don't remember)
 		if (err.name === 'ValidationError') {
-			logger.debug(err);
+			logger.debug(prettyJson(err));
 			return res
 				.status(StatusCodes.BAD_REQUEST)
 				.json({ message: err.message, details: err.errors });
@@ -83,7 +82,7 @@ export const changePassword = async (req, res) => {
 		user: { id: userId }
 	} = req;
 
-	logger.debug('Acknowledged: ' + prettyJson(body));
+	logger.silly('Controller(user, changePassword) | Ack: ' + prettyJson(body));
 
 	// 1. validate the request
 	const { error } = validatePasswordChange({ ...body, userId });
@@ -108,6 +107,5 @@ export const changePassword = async (req, res) => {
 	user.password = hashedPassword;
 	await user.save();
 
-	logger.debug('Updated password');
 	res.status(StatusCodes.OK).json({ message: 'Password updated successfully' });
 };

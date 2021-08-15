@@ -15,9 +15,12 @@ export const acceptInvitation = async (req, res) => {
 	const { invitationId } = req.params;
 	const { id: userId } = req.user;
 
+	logger.silly(`Controller(invitation, accept) | Ack: ${prettyJson({ invitationId, userId })}`);
+
 	// 1. validate the invitation
 	const { error } = JoiObjectId().required().validate(invitationId);
 	if (error) {
+		logger.debug(prettyJson(error));
 		return res
 			.status(StatusCodes.BAD_REQUEST)
 			.json({ message: error.details[0].message, details: error.details });
@@ -25,7 +28,7 @@ export const acceptInvitation = async (req, res) => {
 
 	// 2. find the invitation and check if the user is invited
 	const invitation = await Invitation.findById(invitationId);
-	logger.debug(`Invitation ${invitationId} found: ${prettyJson(invitation)}`);
+	logger.silly(`Invitation ${invitationId} found: ${prettyJson(invitation)}`);
 
 	if (!invitation || invitation?.invited_user != userId) {
 		return res.status(StatusCodes.NOT_FOUND).json({

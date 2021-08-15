@@ -1,7 +1,7 @@
-import { StatusCodes } from 'http-status-codes';
 import config from 'config';
-import { logger } from '@tools';
+import { StatusCodes } from 'http-status-codes';
 import { Project, SpecialAccessToken, Team, User } from '@models';
+import { logger } from '@tools';
 import { prettyJson } from '@utilities';
 import { validateProject, validateProjectPostRequest } from '@validation';
 
@@ -17,7 +17,7 @@ import { validateProject, validateProjectPostRequest } from '@validation';
 export const createProject = async (req, res) => {
 	const { project_name, scope, owner, secrets } = req.body;
 	const projectAttrs = { project_name, scope, owner, secrets };
-	logger.debug('Acknowledged: ' + prettyJson(projectAttrs));
+	logger.silly('Controller(project, create) | Ack: ' + prettyJson(projectAttrs));
 
 	// 1. validate the request
 	const { errors } = validateProject(projectAttrs);
@@ -56,7 +56,6 @@ export const createProject = async (req, res) => {
 		const {
 			_doc: { _id, app_id }
 		} = await theNewProject.save();
-		logger.debug('Project created successfully');
 
 		// 4ii. add the project to owner's list of projects
 		projectOwner.projects.push(_id);
@@ -77,7 +76,7 @@ export const createProject = async (req, res) => {
 
 		// Other mongo errors
 		if (error.name === 'ValidationError') {
-			logger.debug(error);
+			logger.debug(prettyJson(error));
 			return res
 				.status(StatusCodes.BAD_REQUEST)
 				.json({ message: error.message, details: error.errors });
@@ -96,12 +95,15 @@ export const postSecrets = async (req, res) => {
 	const { projectIdOrAppId } = req.params;
 	const { project } = req; // the document from db
 
-	logger.debug(`Acknowledged secrets of ${projectIdOrAppId}: ${prettyJson(secrets)}`);
+	logger.silly(
+		`Controller(project, postSecrets) | Ack: ${prettyJson({ projectIdOrAppId, secrets })}`
+	);
 
 	// 1. validate the request
 	const { error } = validateProjectPostRequest(projectIdOrAppId, secrets);
 
 	if (error) {
+		logger.debug(prettyJson(error));
 		return res
 			.status(StatusCodes.BAD_REQUEST)
 			.json({ message: error.details[0].message, details: error });
@@ -128,7 +130,7 @@ export const postSecrets = async (req, res) => {
 	} catch (error) {
 		if (error.name === 'ValidationError') {
 			// i don't think this would ever occur, but, just to be extra safe
-			logger.debug(error);
+			logger.debug(prettyJson(error));
 			return res
 				.status(StatusCodes.BAD_REQUEST)
 				.json({ message: error.message, details: error.errors });
@@ -147,6 +149,13 @@ export const fetchSecrets = async (req, res) => {
 		_doc: { app_id, secrets, backup }
 	} = req.project;
 
+	logger.silly(
+		`Controller(project, fetchSecrets) | Data: ${prettyJson({
+			req: { user: req.user, project: req.params.projectIdOrAppId },
+			res: { app_id, secrets, backup }
+		})}`
+	);
+
 	// todo: decrypt
 	res.status(StatusCodes.OK).json({ message: 'Fetched', data: { app_id, secrets, backup } });
 };
@@ -158,8 +167,11 @@ export const addSpecialAccessToken = async (req, res) => {
 	//* use authorization, verifiedUsersOnly and privilegedUsersOnly middlewares
 	const { project, user } = req; // the document from db
 
-	logger.debug(
-		`Project: Add SAT | Ack: ${prettyJson({ toProject: project, userPerformingOp: user })}`
+	logger.silly(
+		`Controller(project, addSat) | Ack: ${prettyJson({
+			toProject: project,
+			userPerformingOp: user
+		})}`
 	);
 
 	// create the token
