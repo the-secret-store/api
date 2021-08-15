@@ -2,7 +2,7 @@ import { StatusCodes } from 'http-status-codes';
 import config from 'config';
 import { OTP, User } from '@models';
 import { logger } from '@tools';
-import { generateOTP, sendMail } from '@utilities';
+import { generateOTP, prettyJson, sendMail } from '@utilities';
 
 /**
  * Controller for OTP - email verifications
@@ -22,6 +22,9 @@ import { generateOTP, sendMail } from '@utilities';
 export const sendOTP = async (req, res) => {
 	// 1. get user details //* use authorization middleware
 	const { id: character_id, email, unverified } = req.user;
+	logger.silly(
+		`Controller(verification, sendOtp) | Ack: ${prettyJson({ character_id, email, unverified })}`
+	);
 
 	// check for unverified property in auth payload (set only if is_verified is false),
 	// if not present, close request as verified already
@@ -31,12 +34,12 @@ export const sendOTP = async (req, res) => {
 
 	// 2. generate otp and save to database (update if already exist)
 	const otp = generateOTP();
-	logger.debug('OTP: ' + otp);
+	logger.debug(`OTP: ${otp}`);
 	await OTP.updateOne({ character_id }, { otp }, { upsert: true });
 
 	// 3. send the otp
 	try {
-		logger.debug('Sending OTP to ' + email);
+		logger.debug(`Sending OTP to ${email}`);
 		await sendMail(
 			email,
 			'The secret store account verification',
@@ -73,6 +76,8 @@ export const verifyAccount = async (req, res) => {
 	// 1. get user details and otp //* use authorization middleware
 	const { id: character_id } = req.user;
 	const { otp } = req.body;
+
+	logger.silly(`Controller(verification, verify) Ack: ${prettyJson({ character_id, otp })}`);
 
 	// 2. check the otp
 	if (!otp || otp.toString().length !== 6) {

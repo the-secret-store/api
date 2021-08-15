@@ -27,7 +27,7 @@ const TOKEN_PRIVATE_KEY = config.get('secretKey');
 
 export const login = async (req, res) => {
 	const { email, password } = req.body;
-	logger.debug('Acknowledged: ' + prettyJson({ email, password }));
+	logger.silly('Controller(auth, login) | Ack: ' + prettyJson({ email, password }));
 
 	// 1. check if given credentials meet user validation, if it doesn't, we can avoid db query
 	const { error } = validateAuthRequest({ email, password });
@@ -64,15 +64,15 @@ export const login = async (req, res) => {
 
 /**
  * Check if the user is authorized to perform operations
- *
+ * I don't know what is the use of this controller, but I'm keeping it for now
  * @route: /auth/check
  * @method: POST
  * @requires: headers {authorization}
  * @returns: 200 | 401
  */
-
 export const checkAuth = async (req, res) => {
 	// make sure to use authorize middleware
+	logger.silly(`Controller(auth, check) | Ack: ${prettyJson(req.user)}`);
 	if (req.user) {
 		return res.status(StatusCodes.OK).json({ message: 'Authorized', data: req.user });
 	}

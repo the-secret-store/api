@@ -15,7 +15,7 @@ export default async (req, res, next) => {
 	const { projectIdOrAppId } = req.params;
 	const { user } = req;
 
-	logger.debug('(PrevUsersOnly) Ack : ' + prettyJson(req.params));
+	logger.debug('(PrevUsersOnly) | Ack : ' + prettyJson(req.params));
 
 	const { project, owner } = await findOwnerByProjectIdOrAppId(projectIdOrAppId);
 
