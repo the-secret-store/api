@@ -2,7 +2,7 @@ import { AuthHeader } from './definitions';
 
 export default {
 	'/verify/get-otp': {
-		get: {
+		patch: {
 			summary: 'Send verification code to an authorized user',
 			description:
 				'Sends email with a verification code to an authorized user, requires authorization header in Bearer <token> format',
@@ -18,7 +18,7 @@ export default {
 		}
 	},
 	'/verify/check': {
-		post: {
+		put: {
 			summary: 'Verify the user with otp',
 			description:
 				'Sets the logged in user as verified using verification code, requires authorization header in Bearer <token> format and otp in the body',

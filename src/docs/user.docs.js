@@ -38,7 +38,7 @@ export default {
 		}
 	},
 	'/user/changePassword': {
-		post: {
+		put: {
 			summary: 'Change the password of a user',
 			description: 'Update the password of the logged in user',
 			tags: ['user'],

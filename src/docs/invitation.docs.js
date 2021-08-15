@@ -2,7 +2,7 @@ import { AuthHeader } from './definitions';
 
 export default {
 	'/invitation/{invitationId}/accept': {
-		get: {
+		put: {
 			summary: 'Accept an invite',
 			description: 'Accept a team invitation and join the team',
 			tags: ['invitation'],
