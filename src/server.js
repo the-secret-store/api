@@ -5,6 +5,7 @@ import checkEnv from '@tools/checkEnv';
 
 import {
 	connectDB,
+	handleServerErrors,
 	registerListener,
 	registerLogging,
 	registerPreprocessor,
@@ -26,6 +27,7 @@ function spinServer(port, host) {
 	registerRouters(app);
 	connectDB();
 	verifyMailConnection();
+	handleServerErrors(app);
 
 	return registerListener(app, port, host);
 }
