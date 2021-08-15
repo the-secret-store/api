@@ -10,7 +10,7 @@ const router = Router();
  * Available routes: /get-otp, /check
  */
 
-router.get('/get-otp', authorize, VerificationController.sendOTP);
-router.post('/check', authorize, VerificationController.verifyAccount);
+router.patch('/get-otp', authorize, VerificationController.sendOTP);
+router.put('/check', authorize, VerificationController.verifyAccount);
 
 export default router;
