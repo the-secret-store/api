@@ -63,13 +63,27 @@ export default {
 			tags: ['project'],
 			consumes: 'application/json',
 			produces: 'application/json',
-			parameters: [AuthHeader, ProjectOrAppIdParam],
+			parameters: [
+				AuthHeader,
+				ProjectOrAppIdParam,
+				{
+					in: 'header',
+					name: 'special-access-token',
+					description: 'Special access token',
+					required: false,
+					type: 'string',
+					format: 'Mongo Object Id'
+				}
+			],
 			responses: {
 				200: {
 					description: 'The project secrets were fetched successfully'
 				},
 				400: {
 					description: 'Request error'
+				},
+				401: {
+					description: 'Not authorized to perform this action'
 				},
 				403: {
 					description: 'Forbidden: not enough privileges to fetch the secrets'

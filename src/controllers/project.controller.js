@@ -142,7 +142,7 @@ export const postSecrets = async (req, res) => {
  * Controller for /post/:projectIdOrAppId/fetch
  */
 export const fetchSecrets = async (req, res) => {
-	//* use authorization, verifiedUsersOnly and privilegedUsersOnly middlewares
+	//* use SAT, authorization, verifiedUsersOnly and privilegedUsersOnly middlewares
 	const {
 		_doc: { app_id, secrets, backup }
 	} = req.project;

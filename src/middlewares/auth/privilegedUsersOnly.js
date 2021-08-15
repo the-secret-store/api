@@ -20,9 +20,19 @@ export default async (req, res, next) => {
 	const { project, owner } = await findOwnerByProjectIdOrAppId(projectIdOrAppId);
 
 	if (!project) {
-		return res.status(StatusCodes.BAD_GATEWAY).send('Project not found');
+		return res.status(StatusCodes.BAD_GATEWAY).json({ message: 'Project not found' });
+	}
+	req.project = project;
+
+	if (req.isSAU) {
+		if (project.special_access_tokens?.includes(user.id)) return next();
+		else
+			return res
+				.status(StatusCodes.UNAUTHORIZED)
+				.json({ message: 'This token is not for this project' });
 	}
 
+	// ! this sounds silly, i don't remember why i did this
 	if (!owner) {
 		return res
 			.status(StatusCodes.BAD_GATEWAY)
@@ -39,7 +49,6 @@ export default async (req, res, next) => {
 		});
 	}
 
-	req.project = project;
 	req.owner = owner;
 	next();
 };

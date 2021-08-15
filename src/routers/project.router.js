@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { ProjectController } from '@controllers';
-import { authorize, privilegedUsersOnly, verifiedUsersOnly } from '@middlewares';
+import { acceptSATs, authorize, privilegedUsersOnly, verifiedUsersOnly } from '@middlewares';
 
 /**
  * Router for /projects
@@ -22,6 +22,7 @@ router.post(
 
 router.get(
 	'/:projectIdOrAppId/fetch',
+	acceptSATs,
 	authorize,
 	verifiedUsersOnly,
 	privilegedUsersOnly,

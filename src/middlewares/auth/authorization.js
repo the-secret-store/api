@@ -22,6 +22,8 @@ function obtainTokenFromHeader(authHeader) {
  */
 export default (req, res, next) => {
 	const { authorization } = req.headers;
+
+	if (req.isSAU) return next();
 	if (!authorization) {
 		return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Missing authorization header' });
 	}
