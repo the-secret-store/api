@@ -1,5 +1,6 @@
 export { default as checkEnv } from './checkEnv';
 export { default as connectDB } from './connectDB';
+export { default as handleServerErrors } from './errorHandler';
 export { default as registerListener } from './listener';
 export { default as logger, registerLogging } from './logging';
 export { default as mailer, verifyMailConnection } from './mailConnection';
