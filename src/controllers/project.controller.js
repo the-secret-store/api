@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import { Project, SpecialAccessToken, Team, User } from '@models';
 import { logger } from '@tools';
 import { prettyJson } from '@utilities';
-import { validateProject, validateProjectPostRequest } from '@validation';
+import { validateProject, validateProjectPostRequest, validateSAT } from '@validation';
 
 /**
  * Controller for /project
@@ -166,6 +166,7 @@ export const fetchSecrets = async (req, res) => {
 export const addSpecialAccessToken = async (req, res) => {
 	//* use authorization, verifiedUsersOnly and privilegedUsersOnly middlewares
 	const { project, user } = req; // the document from db
+	const { name } = req.body;
 
 	logger.silly(
 		`Controller(project, addSat) | Ack: ${prettyJson({
@@ -174,12 +175,22 @@ export const addSpecialAccessToken = async (req, res) => {
 		})}`
 	);
 
+	// 1. validate
+	const { error } = validateSAT({ name, projectId: project.id });
+	if (error) {
+		logger.debug(prettyJson(error));
+		return res
+			.status(StatusCodes.BAD_REQUEST)
+			.json({ message: error.details[0].message, details: error.details });
+	}
+
 	// create the token
 	const {
 		_doc: { _id: satId }
 	} = await new SpecialAccessToken({
 		created_by: user.id,
-		to: project.id
+		to: project.id,
+		name
 	}).save();
 
 	// push it to list of tokens
@@ -188,6 +199,6 @@ export const addSpecialAccessToken = async (req, res) => {
 
 	res.status(StatusCodes.CREATED).json({
 		message: 'Special Access Token created successfully',
-		data: { token: satId, projectId: project.id }
+		data: { name, token: satId, projectId: project.id }
 	});
 };
