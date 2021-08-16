@@ -158,9 +158,31 @@ export default {
 			tags: ['project'],
 			consumes: 'application/json',
 			produces: 'application/json',
-			parameters: [AuthHeader, ProjectOrAppIdParam],
+			parameters: [
+				AuthHeader,
+				ProjectOrAppIdParam,
+				{
+					in: 'body',
+					name: 'Add SAT body',
+					required: true,
+					schema: {
+						// $ref: '#/definitions/PostSecrets'
+						type: 'object',
+						required: ['name'],
+						properties: {
+							name: {
+								type: 'string',
+								description: 'Name of the SAT'
+							}
+						},
+						example: {
+							name: 'GitHub Actions'
+						}
+					}
+				}
+			],
 			responses: {
-				200: {
+				201: {
 					description: 'The Special Access Token was created successfully'
 				},
 				400: {
