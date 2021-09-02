@@ -9,9 +9,9 @@ import { prettyJson } from '@utilities';
 import { validateAuthRequest } from '@validation';
 
 /**
- * Controller for /user
+ * Controller for /auth
  *
- * Available controllers: registerUser, checkAuth
+ * Available controllers: login, checkAuth
  */
 
 const TOKEN_PRIVATE_KEY = config.get('secretKey');

@@ -31,7 +31,7 @@ export default {
 				}
 			],
 			responses: {
-				200: { description: 'Registration successful' },
+				201: { description: 'Registration successful' },
 				400: { summary: 'Invalid request', description: 'Validation error or wrong parameters' },
 				500: { description: 'Server error' }
 			}

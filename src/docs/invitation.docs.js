@@ -16,7 +16,7 @@ export default {
 					description: 'The invitation id',
 					type: 'string',
 					required: true,
-					format: 'uuid'
+					format: 'ObjectId'
 				}
 			],
 			responses: {

@@ -6,7 +6,7 @@ const TeamIdParam = {
 	description: 'The team id',
 	required: true,
 	type: 'string',
-	format: 'uuid'
+	format: 'ObjectId'
 };
 
 export default {
@@ -38,7 +38,7 @@ export default {
 				}
 			],
 			responses: {
-				200: {
+				201: {
 					description: 'Team created successfully'
 				},
 				400: {
@@ -79,7 +79,7 @@ export default {
 				}
 			],
 			responses: {
-				200: {
+				201: {
 					description: 'Invite sent successfully'
 				},
 				400: {

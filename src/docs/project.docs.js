@@ -6,7 +6,7 @@ const ProjectOrAppIdParam = {
 	description: 'The project id or the app id',
 	required: true,
 	type: 'string',
-	format: 'uuid'
+	format: 'ObjectId'
 };
 
 export default {
@@ -72,7 +72,7 @@ export default {
 					description: 'Special access token',
 					required: false,
 					type: 'string',
-					format: 'Mongo Object Id'
+					format: 'ObjectId'
 				}
 			],
 			responses: {

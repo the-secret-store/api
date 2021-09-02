@@ -124,7 +124,7 @@ export const inviteUser = async (req, res) => {
 		);
 
 		res
-			.status(StatusCodes.OK)
+			.status(StatusCodes.CREATED)
 			.json({ message: 'Invitation sent successfully', data: { invitationId: invitation._id } });
 	} catch (exp) {
 		await Invitation.findByIdAndDelete(invitation._doc._id);

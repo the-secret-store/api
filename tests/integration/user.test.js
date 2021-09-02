@@ -18,9 +18,9 @@ describe('User router (/user)', () => {
 			await User.deleteMany({});
 		});
 
-		it('return 200 for valid user', async () => {
+		it('return 201 for valid user', async () => {
 			const response = await registerUser(server, validUserObject1);
-			expect(response.statusCode).toEqual(StatusCodes.OK);
+			expect(response.statusCode).toEqual(StatusCodes.CREATED);
 		});
 
 		it('return 400 for user validation error', async () => {

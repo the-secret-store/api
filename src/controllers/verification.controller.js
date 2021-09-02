@@ -16,7 +16,7 @@ import { generateOTP, prettyJson, sendMail } from '@utilities';
  * @route: /verify/get-otp
  * @method: get
  * @requires: header { authorization: 'Bearer <token>' }
- * @returns: 200 | 400 | 401 | 500
+ * @returns: 201 | 400 | 401 | 500
  */
 
 export const sendOTP = async (req, res) => {
@@ -51,7 +51,7 @@ export const sendOTP = async (req, res) => {
 				.status(StatusCodes.OK)
 				.json({ otp, message: 'Verification code sent successfully' });
 		}
-		res.status(StatusCodes.OK).json({ message: 'Verification code sent successfully' });
+		res.status(StatusCodes.CREATED).json({ message: 'Verification code sent successfully' });
 	} catch (err) {
 		// if there was an error, delete the saved otp document
 		logger.error(err.stack);

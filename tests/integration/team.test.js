@@ -115,9 +115,9 @@ describe('Team routes (/team)', () => {
 			expect(res.statusCode).toBe(StatusCodes.NOT_FOUND);
 		});
 
-		it('should respond 200 for a valid invite', async () => {
+		it('should respond 201 for a valid invite', async () => {
 			const res = await inviteToTeam(server, token1, teamId, validUserObject2.email);
-			expect(res.statusCode).toBe(StatusCodes.OK);
+			expect(res.statusCode).toBe(StatusCodes.CREATED);
 			invitationId = res.body.data.invitationId;
 		});
 
