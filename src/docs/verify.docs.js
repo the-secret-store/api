@@ -43,7 +43,7 @@ export default {
 				}
 			],
 			responses: {
-				200: { description: 'Verification email sent successfully' },
+				201: { description: 'Verification email sent successfully' },
 				401: { summary: 'Invalid token', description: 'Missing auth header or invalid token' },
 				500: { description: 'Server error' }
 			}

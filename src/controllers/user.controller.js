@@ -19,7 +19,7 @@ const SALT_ROUNDS = 5;
  * @route: /user/register
  * @method: POST
  * @requires: body { displayName, email, password, teams?, projects? }
- * @returns: 200 | 400 | 500
+ * @returns: 201 | 400 | 500
  */
 export const registerUser = async (req, res) => {
 	const { body } = req;
@@ -46,7 +46,9 @@ export const registerUser = async (req, res) => {
 			_doc: { password, __v, ...userDoc }
 		} = await theNewUser.save();
 
-		return res.status(StatusCodes.OK).json({ message: 'Successfully registered', data: userDoc });
+		return res
+			.status(StatusCodes.CREATED)
+			.json({ message: 'Successfully registered', data: userDoc });
 	} catch (err) {
 		// MongoError: Unique key violation
 		if (err.code === 11000) {
