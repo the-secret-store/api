@@ -6,7 +6,7 @@ const TeamIdParam = {
 	description: 'The team id',
 	required: true,
 	type: 'string',
-	format: 'uuid'
+	format: 'ObjectId'
 };
 
 export default {
