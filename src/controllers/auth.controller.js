@@ -59,7 +59,7 @@ export const login = async (req, res) => {
 	const token = jwt.sign(payload, TOKEN_PRIVATE_KEY);
 	return res
 		.status(StatusCodes.OK)
-		.json({ message: 'Authenticated successfully', token, token_type: 'Bearer' });
+		.json({ message: `Logged in as ${display_name}`, token, token_type: 'Bearer' });
 };
 
 /**
