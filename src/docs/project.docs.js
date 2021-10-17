@@ -53,7 +53,45 @@ export default {
 						}
 					}
 				}
-			]
+			],
+			responses: {
+				201: {
+					description: 'Project created successfully',
+					schema: {
+						type: 'object',
+						properties: {
+							data: {
+								type: 'object',
+								properties: {
+									id: { type: 'string', format: 'ObjectId' },
+									app_id: { type: 'string' }
+								}
+							}
+						},
+						example: {
+							data: {
+								id: '5c8f8f8f8f8f8f8f8f8f8f8',
+								app_id: 'confused-raman-6f7d3a'
+							}
+						}
+					}
+				},
+				400: {
+					description: 'Request error'
+				},
+				401: {
+					description: 'Not authorized to perform this action'
+				},
+				403: {
+					description: 'Forbidden: not enough privileges to fetch the secrets'
+				},
+				409: {
+					description: 'Project already exists'
+				},
+				500: {
+					description: 'Internal Server Error'
+				}
+			}
 		}
 	},
 	'/project/{projectIdOrAppId}/fetch': {
