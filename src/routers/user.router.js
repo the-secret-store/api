@@ -12,5 +12,6 @@ const router = Router();
 
 router.post('/register', UserController.registerUser);
 router.put('/changePassword', authorize, UserController.changePassword);
+router.get('/getTeams', authorize, UserController.getTeams);
 
 export default router;

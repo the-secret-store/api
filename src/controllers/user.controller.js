@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { StatusCodes } from 'http-status-codes';
-import { User, validateUser } from '@models';
+import { Team, User, validateUser } from '@models';
 import { logger } from '@tools';
 import { prettyJson } from '@utilities';
 import { validatePasswordChange } from '@validation';
@@ -110,4 +110,21 @@ export const changePassword = async (req, res) => {
 	await user.save();
 
 	res.status(StatusCodes.OK).json({ message: 'Password updated successfully' });
+};
+
+export const getTeams = async (req, res) => {
+	// * use authorization middleware
+	const { id: userId } = req.user;
+
+	logger.silly(`Controller(team, getTeams) | Ack: ${prettyJson({ userId })}`);
+
+	const { teams: teamIds } = await User.findById(userId, { teams: 1 });
+	const teams = await Promise.all(
+		teamIds.map(async teamId => {
+			const { team_name } = await Team.findById(teamId);
+			return { team_name, team_id: teamId };
+		})
+	);
+	logger.silly(prettyJson(teams));
+	return res.status(StatusCodes.OK).json({ message: 'Teams fetched successfully', data: teams });
 };
