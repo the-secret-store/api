@@ -73,5 +73,20 @@ export default {
 				500: { description: 'Server error' }
 			}
 		}
+	},
+	'/user/getTeams': {
+		get: {
+			summary: 'Get all teams of the user',
+			description: 'Get the list of teams the logged in user is a member of',
+			tags: ['user'],
+			consumes: 'application/json',
+			produces: 'application/json',
+			parameters: [AuthHeader],
+			responses: {
+				200: { description: 'List of teams' },
+				401: { summary: 'Unauthorized', description: 'Missing or invalid auth token' },
+				500: { description: 'Server error' }
+			}
+		}
 	}
 };

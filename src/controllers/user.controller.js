@@ -111,3 +111,13 @@ export const changePassword = async (req, res) => {
 
 	res.status(StatusCodes.OK).json({ message: 'Password updated successfully' });
 };
+
+export const getTeams = async (req, res) => {
+	// * use authorization middleware
+	const { id: userId } = req.user;
+
+	logger.silly(`Controller(team, getTeams) | Ack: ${prettyJson({ userId })}`);
+
+	const { teams } = await User.findById(userId, { teams: 1 });
+	return res.status(StatusCodes.OK).json({ message: 'Teams fetched successfully', data: teams });
+};
