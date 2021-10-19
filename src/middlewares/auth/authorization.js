@@ -1,40 +1,34 @@
-import jwt from 'jsonwebtoken';
 import config from 'config';
 import { StatusCodes } from 'http-status-codes';
+import jwt from 'jsonwebtoken';
+
 import { logger } from '@tools';
-import { prettyJson } from '@utilities';
+import { obtainTokenFromRequest, prettyJson } from '@utilities';
 
-const TOKEN_PRIVATE_KEY = config.get('secretKey');
-
-/**
- * Obtains token from auth header
- * @param authHeader in BEARER <token> format
- * @returns JWT token
- */
-function obtainTokenFromHeader(authHeader) {
-	return authHeader?.split(' ')[1];
-}
+const JWT_AUTH_SECRET = config.get('jwtAuthSecret');
 
 /**
  * Allows only (401) authenticated users to access routes
  * @requires jwt on auth header in BEARER <token> format
  * @mounts user object onto req object
  */
-export default (req, res, next) => {
-	const { authorization } = req.headers;
-
+export default async (req, res, next) => {
 	if (req.isSAU) return next();
-	if (!authorization) {
+
+	const token = obtainTokenFromRequest(req);
+	if (!token) {
 		return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Missing authorization header' });
 	}
 
-	const token = obtainTokenFromHeader(authorization);
-
 	try {
-		const payload = jwt.verify(token, TOKEN_PRIVATE_KEY);
+		const payload = jwt.verify(token, JWT_AUTH_SECRET);
 		logger.silly('Middleware(authorization) Token payload: ' + prettyJson(payload));
 		req.user = payload; // has id, display_name, email, ? unverified
 	} catch (err) {
+		if (err.name === 'TokenExpiredError') {
+			return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Token expired' });
+		}
+
 		return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Invalid token' });
 	}
 

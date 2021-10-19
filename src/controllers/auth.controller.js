@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 
 import { User } from '@models';
 import { logger } from '@tools';
-import { prettyJson } from '@utilities';
+import { prettyJson, obtainTokenFromRequest } from '@utilities';
 import { validateAuthRequest } from '@validation';
 
 /**
@@ -14,7 +14,8 @@ import { validateAuthRequest } from '@validation';
  * Available controllers: login, checkAuth
  */
 
-const TOKEN_PRIVATE_KEY = config.get('secretKey');
+const JWT_AUTH_SECRET = config.get('jwtAuthSecret');
+const JWT_REFRESH_SECRET = config.get('jwtRefreshSecret');
 
 /**
  * Login using email and password
@@ -56,10 +57,14 @@ export const login = async (req, res) => {
 	const { id, display_name, is_verified } = user;
 	const payload = { id, display_name, email };
 	if (!is_verified) payload.unverified = true;
-	const token = jwt.sign(payload, TOKEN_PRIVATE_KEY);
-	return res
-		.status(StatusCodes.OK)
-		.json({ message: `Logged in as ${display_name}`, token, token_type: 'Bearer' });
+	const authToken = jwt.sign(payload, JWT_AUTH_SECRET, { expiresIn: '15m' });
+	const refreshToken = jwt.sign(payload, JWT_REFRESH_SECRET, { expiresIn: '365d' });
+
+	return res.status(StatusCodes.OK).json({
+		message: `Logged in as ${display_name}`,
+		tokens: { authToken, refreshToken },
+		token_format: 'Bearer'
+	});
 };
 
 /**
@@ -78,4 +83,41 @@ export const checkAuth = async (req, res) => {
 	}
 
 	return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Not authorized' });
+};
+
+/**
+ * Get a new refresh-auth token pair
+ * @route: /auth/get-new-tokens
+ * @method: PUT
+ * @requires: headers {authorization} (refreshToken)
+ * @returns: 200 | 401 | 500
+ */
+export const getNewTokenPair = async (req, res) => {
+	const oldRefreshToken = obtainTokenFromRequest(req);
+
+	try {
+		const { id } = jwt.decode(oldRefreshToken);
+		const { refreshTokens } = await User.findById(id, { refreshTokens: 1 });
+
+		if (!refreshTokens.includes(oldRefreshToken)) {
+			throw new Error('Invalid token');
+		}
+
+		const payload = jwt.verify(oldRefreshToken, JWT_REFRESH_SECRET);
+		const newAuthToken = jwt.sign(payload, JWT_AUTH_SECRET);
+		const newRefreshToken = jwt.sign(payload, JWT_REFRESH_SECRET);
+		await User.findByIdAndUpdate(id, {
+			$set: {
+				refreshTokens: { ...refreshTokens.filter(t => t !== oldRefreshToken), newRefreshToken }
+			}
+		});
+		req.user = payload;
+
+		return res.status(201).json({
+			message: 'New tokens generated',
+			tokens: { authToken: newAuthToken, refreshToken: newRefreshToken }
+		});
+	} catch (err) {
+		return res.status(StatusCodes.FORBIDDEN).json({ message: 'Invalid token' });
+	}
 };
