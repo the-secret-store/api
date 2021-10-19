@@ -1,5 +1,4 @@
 // Based on calavera/name_generator.rb
-
 import generateRandomHex from './generateRandomHex';
 
 export const LEFT = [

@@ -1,7 +1,6 @@
-import express from 'express';
-import 'dotenv/config';
 import config from 'config';
-import checkEnv from '@tools/checkEnv';
+import 'dotenv/config';
+import express from 'express';
 
 import {
 	connectDB,
@@ -13,6 +12,7 @@ import {
 	setupDocs,
 	verifyMailConnection
 } from '@tools';
+import checkEnv from '@tools/checkEnv';
 
 const PORT = config.get('port');
 const HOST = config.get('host');

@@ -1,4 +1,5 @@
 import Joi from 'joi';
+
 import { JoiComplexPassword } from './schemas';
 
 /**

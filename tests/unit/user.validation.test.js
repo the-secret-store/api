@@ -1,4 +1,5 @@
 import { validatePasswordChange, validateUser } from '@validation';
+
 import { validObjectId, validUserObject1, validUserObject2 } from '../constants';
 
 describe('User validations', () => {

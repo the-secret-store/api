@@ -1,4 +1,5 @@
 import { Router } from 'express';
+
 import { ProjectController } from '@controllers';
 import { acceptSATs, authorize, privilegedUsersOnly, verifiedUsersOnly } from '@middlewares';
 

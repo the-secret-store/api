@@ -1,7 +1,9 @@
-import { OTP, Team, User } from '@models';
 import { StatusCodes } from 'http-status-codes';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
+
+import { OTP, Team, User } from '@models';
+
 import {
 	validObjectId,
 	validTeam1,

@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { StatusCodes } from 'http-status-codes';
+
 import { Team, User, validateUser } from '@models';
 import { logger } from '@tools';
 import { prettyJson } from '@utilities';

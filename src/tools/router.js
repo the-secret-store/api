@@ -1,4 +1,5 @@
 import 'express-async-errors';
+
 import {
 	AuthRouter,
 	InvitationRouter,

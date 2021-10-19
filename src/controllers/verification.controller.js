@@ -1,5 +1,6 @@
-import { StatusCodes } from 'http-status-codes';
 import config from 'config';
+import { StatusCodes } from 'http-status-codes';
+
 import { OTP, User } from '@models';
 import { logger } from '@tools';
 import { generateOTP, prettyJson, sendMail } from '@utilities';

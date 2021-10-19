@@ -1,10 +1,12 @@
-import swaggerUI from 'swagger-ui-express';
-import { name as appName, description, license, version } from 'package.json';
+import chalk from 'chalk';
 import config from 'config';
-import logger from './logging';
+import { name as appName, description, license, version } from 'package.json';
+import swaggerUI from 'swagger-ui-express';
+
 import docs from '@docs';
 import tags from '@docs/tags';
-import chalk from 'chalk';
+
+import logger from './logging';
 
 const documentObject = {
 	swagger: '2.0',

@@ -1,4 +1,5 @@
 import { validateAuthRequest } from '@validation';
+
 import { validUserObject1 } from '../constants/user.constant';
 
 describe('Auth validations', () => {

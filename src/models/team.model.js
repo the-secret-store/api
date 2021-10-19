@@ -1,5 +1,6 @@
 import Joi from 'joi';
 import { model, Schema, Types } from 'mongoose';
+
 import { JoiObjectId } from '@validation';
 
 function insertOwner() {

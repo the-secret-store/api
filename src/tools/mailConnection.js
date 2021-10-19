@@ -1,6 +1,7 @@
-import { createTransport } from 'nodemailer';
-import config from 'config';
 import chalk from 'chalk';
+import config from 'config';
+import { createTransport } from 'nodemailer';
+
 import { logger } from '@tools';
 
 const transport = createTransport({

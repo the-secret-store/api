@@ -1,4 +1,5 @@
 import request from 'supertest';
+
 import { loginUser } from './user.functions';
 
 /**

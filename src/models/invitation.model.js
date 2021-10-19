@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+
 const { Types } = Schema;
 
 const InvitationSchema = new Schema(
