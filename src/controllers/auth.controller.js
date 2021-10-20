@@ -100,16 +100,20 @@ export const checkAuth = async (req, res) => {
  */
 export const getNewTokenPair = async (req, res) => {
 	const oldRefreshToken = obtainTokenFromRequest(req);
+	logger.silly('Controller(auth, get-new-tokens) | Ack: ' + prettyJson({ oldRefreshToken }));
 
 	try {
 		const { id } = jwt.decode(oldRefreshToken);
-		const { refreshTokens } = await User.findById(id, { refreshTokens: 1 });
+		const { refresh_tokens: refreshTokens } = await User.findById(id, { refresh_tokens: 1 });
 
 		if (!refreshTokens.includes(oldRefreshToken)) {
+			logger.debug('Not found in list of RTs');
 			throw new Error('Invalid token');
 		}
 
+		logger.debug('Found in the list of RTs');
 		const payload = jwt.verify(oldRefreshToken, JWT_REFRESH_SECRET);
+		logger.debug('Valid RT');
 		const newAuthToken = jwt.sign(payload, JWT_AUTH_SECRET);
 		const newRefreshToken = jwt.sign(payload, JWT_REFRESH_SECRET);
 		await User.findByIdAndUpdate(id, {
