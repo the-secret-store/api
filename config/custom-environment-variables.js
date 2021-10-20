@@ -1,3 +1,5 @@
+require('dotenv/config');
+
 /**
  * These values will be loaded from '.env' file
  * refer docs: https://github.com/lorenwest/node-config/wiki/Environment-Variables
