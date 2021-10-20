@@ -53,7 +53,7 @@ export default {
 			}
 		}
 	},
-	'/auth/get-new-tokens': {
+	'/auth/refresh': {
 		put: {
 			summary: 'Get new refresh-auth token pair',
 			description:

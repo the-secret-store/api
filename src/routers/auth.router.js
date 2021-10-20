@@ -13,6 +13,6 @@ const router = Router();
 
 router.post('/login', AuthController.login);
 router.get('/check', authorize, AuthController.checkAuth);
-router.put('/get-new-tokens', AuthController.getNewTokenPair);
+router.put('/refresh', AuthController.getNewTokenPair);
 
 export default router;

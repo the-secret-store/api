@@ -93,14 +93,14 @@ export const checkAuth = async (req, res) => {
 
 /**
  * Get a new refresh-auth token pair
- * @route: /auth/get-new-tokens
+ * @route: /auth/refresh
  * @method: PUT
  * @requires: headers {authorization} (refreshToken)
  * @returns: 200 | 401 | 500
  */
 export const getNewTokenPair = async (req, res) => {
 	const oldRefreshToken = obtainTokenFromRequest(req);
-	logger.silly('Controller(auth, get-new-tokens) | Ack: ' + prettyJson({ oldRefreshToken }));
+	logger.silly('Controller(auth, refresh) | Ack: ' + prettyJson({ oldRefreshToken }));
 
 	try {
 		const { id } = jwt.decode(oldRefreshToken);
