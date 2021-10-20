@@ -60,6 +60,12 @@ export const login = async (req, res) => {
 	const authToken = jwt.sign(payload, JWT_AUTH_SECRET, { expiresIn: '15m' });
 	const refreshToken = jwt.sign(payload, JWT_REFRESH_SECRET, { expiresIn: '365d' });
 
+	if (user.refresh_tokens.length >= 5) {
+		user.refresh_tokens = [];
+	}
+	user.refresh_tokens = [...user.refresh_tokens, refreshToken];
+	user.save();
+
 	return res.status(StatusCodes.OK).json({
 		message: `Logged in as ${display_name}`,
 		tokens: { authToken, refreshToken },
