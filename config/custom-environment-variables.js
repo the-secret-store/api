@@ -13,6 +13,8 @@ module.exports = {
 	port: 'PORT',
 	jwtAuthSecret: 'JWT_AUTH_SECRET',
 	jwtRefreshSecret: 'JWT_REFRESH_SECRET',
+	authExpiry: 'AUTH_EXPIRY',
+	refreshExpiry: 'REFRESH_EXPIRY',
 	logRequests: 'VERBOSE_REQ_LOGGING',
 	smtp_email: 'SMTP_EMAIL',
 	smtp_password: 'SMTP_PASSWORD'

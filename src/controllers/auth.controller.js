@@ -17,6 +17,9 @@ import { validateAuthRequest } from '@validation';
 const JWT_AUTH_SECRET = config.get('jwtAuthSecret');
 const JWT_REFRESH_SECRET = config.get('jwtRefreshSecret');
 
+const AUTH_EXPIRY = config.get('authExpiry');
+const REFRESH_EXPIRY = config.get('refreshExpiry');
+
 /**
  * Login using email and password
  *
@@ -57,8 +60,8 @@ export const login = async (req, res) => {
 	const { id, display_name, is_verified } = user;
 	const payload = { id, display_name, email };
 	if (!is_verified) payload.unverified = true;
-	const authToken = jwt.sign(payload, JWT_AUTH_SECRET, { expiresIn: '15m' });
-	const refreshToken = jwt.sign(payload, JWT_REFRESH_SECRET, { expiresIn: '365d' });
+	const authToken = jwt.sign(payload, JWT_AUTH_SECRET, { expiresIn: AUTH_EXPIRY });
+	const refreshToken = jwt.sign(payload, JWT_REFRESH_SECRET, { expiresIn: REFRESH_EXPIRY });
 
 	if (user.refresh_tokens.length >= 5) {
 		user.refresh_tokens = [];
