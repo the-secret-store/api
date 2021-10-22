@@ -38,4 +38,19 @@ router.patch(
 	ProjectController.addSpecialAccessToken
 );
 
+router.delete(
+	'/:projectIdOrAppId/removeSAT/:sat',
+	authorize,
+	verifiedUsersOnly,
+	privilegedUsersOnly,
+	ProjectController.removeSpecialAccessToken
+);
+
+router.delete(
+	'/:projectIdOrAppId/delete',
+	authorize,
+	verifiedUsersOnly,
+	ProjectController.deleteProject
+);
+
 export default router;

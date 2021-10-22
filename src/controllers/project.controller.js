@@ -162,7 +162,7 @@ export const fetchSecrets = async (req, res) => {
 };
 
 /**
- * Controller for /post/:projectIdOrAppId/addSAT
+ * Controller for /project/:projectIdOrAppId/addSAT
  */
 export const addSpecialAccessToken = async (req, res) => {
 	//* use authorization, verifiedUsersOnly and privilegedUsersOnly middlewares
@@ -202,4 +202,66 @@ export const addSpecialAccessToken = async (req, res) => {
 		message: 'Special Access Token created successfully',
 		data: { name, token: satId, projectId: project.id }
 	});
+};
+
+/**
+ * Controller for /project/:projectIdOrAppId/removeSAT/:sat
+ */
+export const removeSpecialAccessToken = async (req, res) => {
+	//* use authorization, verifiedUsersOnly and privilegedUsersOnly middlewares
+	const { project, user } = req; // the document from db
+	const { sat } = req.params;
+
+	logger.silly(
+		`Controller(project, removeSat) | Ack: ${prettyJson({
+			onProject: project,
+			userPerformingOp: user
+		})}`
+	);
+
+	// 1. validate
+	const { error } = validateSAT({ token: sat, projectId: project.id });
+	if (error) {
+		logger.debug(prettyJson(error));
+		return res
+			.status(StatusCodes.BAD_REQUEST)
+			.json({ message: error.details[0].message, details: error.details });
+	}
+
+	// 2. remove the token
+	const { deletedCount } = await SpecialAccessToken.deleteOne({ _id: sat, to: project.id });
+	if (deletedCount === 0) {
+		return res.status(StatusCodes.NOT_FOUND).json({
+			message: 'Special Access Token not found',
+			details: { token: sat }
+		});
+	}
+
+	// 3. remove the token from the project
+	project.special_access_tokens = project.special_access_tokens.filter(sat => sat !== sat);
+	await project.save();
+
+	res.status(StatusCodes.OK).json({ message: `Special Access Token removed successfully` });
+};
+
+/**
+ * Controller for /project/:projectIdOrAppId/delete
+ */
+export const deleteProject = async (req, res) => {
+	//* use authorization, verifiedUsersOnly and privilegedUsersOnly middlewares
+	const { project } = req; // the document from db
+
+	logger.silly(`Controller(project, delete) | Ack: ${prettyJson({ projectId: project.id })}`);
+
+	// 1. find the project owner & remove ref
+	const {
+		_doc: { owner }
+	} = await User.findOne({ _id: project.owner });
+	owner.projects = owner.projects.filter(projectId => projectId !== project.id);
+	await owner.save();
+
+	// 2. delete the project
+	await Project.deleteOne({ _id: project.id });
+
+	res.status(StatusCodes.OK).json({ message: `Project deleted successfully` });
 };

@@ -237,5 +237,78 @@ export default {
 				}
 			}
 		}
+	},
+	'/project/{projectIdOrAppId}/removeSat/{sat}': {
+		delete: {
+			summary: 'Remove a special access token',
+			description: 'Remove a special access token from the project',
+			tags: ['project'],
+			consumes: 'application/json',
+			produces: 'application/json',
+			parameters: [
+				AuthHeader,
+				ProjectOrAppIdParam,
+				{
+					in: 'path',
+					name: 'Special Access Token',
+					description: 'The SAT to be removed',
+					required: true,
+					type: 'string',
+					format: 'ObjectId'
+				}
+			],
+			responses: {
+				200: {
+					description: 'The SAT was removed successfully'
+				},
+				400: {
+					description: 'Request error'
+				},
+
+				401: {
+					description: 'Unauthorized: the user is not authenticated'
+				},
+				403: {
+					description: 'Forbidden: not enough privileges to perform the operation'
+				},
+				404: {
+					description: 'Not found: the project was not found'
+				},
+				500: {
+					description: 'Internal Server Error'
+				}
+			}
+		}
+	},
+	'/project/{projectIdOrAppId}/delete': {
+		delete: {
+			summary: 'Delete a project',
+			description: 'Delete a project',
+			tags: ['project'],
+			consumes: 'application/json',
+			produces: 'application/json',
+			parameters: [AuthHeader, ProjectOrAppIdParam],
+			responses: {
+				200: {
+					description: 'The project was deleted successfully'
+				},
+				400: {
+					description: 'Request error'
+				},
+				401: {
+					description: 'Unauthorized: the user is not authenticated'
+				},
+				403: {
+					description: 'Forbidden: not enough privileges to perform the operation'
+				},
+				404: {
+					description: 'Not found: the project was not found'
+				},
+
+				500: {
+					description: 'Internal Server Error'
+				}
+			}
+		}
 	}
 };
