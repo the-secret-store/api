@@ -135,3 +135,24 @@ export const inviteUser = async (req, res) => {
 		throw exp;
 	}
 };
+
+/**
+ * Delete team
+ * @requires {authorization}: header, {teamId}: params
+ */
+export const deleteTeam = async (req, res) => {
+	// * use auth middlewares
+	const { id: owner } = req.user;
+	const { teamId } = req.params;
+
+	logger.silly(`Controller(team, delete) | Ack: ${prettyJson({ owner, teamId })}`);
+
+	const { deletedCount } = await Team.deleteOne({ _id: teamId, owner });
+	if (deletedCount === 0) {
+		return res.status(StatusCodes.NOT_FOUND).json({ message: 'Team not found' });
+	}
+
+	// delete the team from the user's team list
+	await User.findByIdAndUpdate(owner, { $pull: { teams: teamId } }); // todo: check this
+	return res.status(StatusCodes.OK).json({ message: 'Team deleted successfully' });
+};

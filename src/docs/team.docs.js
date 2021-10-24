@@ -96,5 +96,32 @@ export default {
 				}
 			}
 		}
+	},
+	'team/{teamId}/delete': {
+		delete: {
+			summary: 'Delete a team',
+			description: 'Delete an existing team',
+			tags: ['team'],
+			consumes: 'application/json',
+			produces: 'application/json',
+			parameters: [AuthHeader, TeamIdParam],
+			responses: {
+				200: {
+					description: 'Team deleted successfully'
+				},
+				401: {
+					description: 'Not authorized to perform this operation'
+				},
+				403: {
+					description: 'Forbidden: not enough privileges'
+				},
+				404: {
+					description: 'Team not found'
+				},
+				500: {
+					description: 'Internal server error'
+				}
+			}
+		}
 	}
 };

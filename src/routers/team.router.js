@@ -19,5 +19,12 @@ router.post(
 	teamAdminsOnly,
 	TeamController.inviteUser
 );
+router.delete(
+	'/:teamId/delete',
+	authorize,
+	verifiedUsersOnly,
+	teamAdminsOnly,
+	TeamController.deleteTeam
+);
 
 export default router;
