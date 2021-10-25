@@ -2,13 +2,6 @@
 	"autorun": true,
 	"terminals": [
 		{
-			"name": "zsh",
-			"description": "Terminal for use",
-			"focus": true,
-			"commands": ["clear"],
-			"recycle": true
-		},
-		{
 			"name": "mongosh",
 			"description": "Start mongodb daemon service and a shell",
 			"focus": false,
