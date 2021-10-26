@@ -91,6 +91,10 @@ function colorizeMethod(methodName) {
 			colorizedMethod = chalk.red(methodName);
 			break;
 
+		case 'OPTIONS':
+			colorizedMethod = chalk.blueBright(methodName);
+			break;
+
 		default:
 			break;
 	}
