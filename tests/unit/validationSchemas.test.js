@@ -1,4 +1,5 @@
 import { JoiObjectId, JoiComplexPassword } from '@validation';
+
 import { validObjectId, invalidObjectId } from '../constants';
 
 describe('Joi custom validation schemas', () => {

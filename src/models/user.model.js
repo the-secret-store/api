@@ -1,5 +1,6 @@
 import Joi from 'joi';
 import { model, Schema, Types } from 'mongoose';
+
 import { JoiComplexPassword } from '@validation';
 
 const UserSchema = new Schema(
@@ -9,7 +10,8 @@ const UserSchema = new Schema(
 		password: { type: String, required: true },
 		teams: { type: [{ type: Types.ObjectId, ref: 'team' }] },
 		projects: { type: [{ type: Types.ObjectId, ref: 'project' }] },
-		is_verified: { type: Boolean, default: false }
+		is_verified: { type: Boolean, default: false },
+		refresh_tokens: { type: [{ type: String }], maxlength: 5 }
 	},
 	{ timestamps: true }
 );

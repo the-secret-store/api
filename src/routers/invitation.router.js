@@ -1,4 +1,5 @@
 import { Router } from 'express';
+
 import { InvitationController } from '@controllers';
 import { authorize, verifiedUsersOnly } from '@middlewares';
 

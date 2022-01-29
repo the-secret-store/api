@@ -1,7 +1,9 @@
-import mongoose from 'mongoose';
-import jwt from 'jsonwebtoken';
 import { StatusCodes } from 'http-status-codes';
+import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
+
 import { OTP, User } from '@models';
+
 import { validUserObject1 } from '../constants';
 import { getOTP, loginUser, registerUser, verifyUser } from '../functions';
 

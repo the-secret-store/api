@@ -1,4 +1,5 @@
 import { Router } from 'express';
+
 import { VerificationController } from '@controllers';
 import { authorize } from '@middlewares';
 

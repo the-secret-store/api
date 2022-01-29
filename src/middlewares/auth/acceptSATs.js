@@ -1,8 +1,9 @@
 import { StatusCodes } from 'http-status-codes';
+
 import { SpecialAccessToken } from '@models';
-import { JoiObjectId } from '@validation/schemas';
 import { logger } from '@tools';
 import prettyJson from '@utilities/prettyJson';
+import { JoiObjectId } from '@validation/schemas';
 
 export default async (req, res, next) => {
 	const specialAccessToken = req.headers['special-access-token'];

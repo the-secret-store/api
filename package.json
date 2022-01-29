@@ -6,7 +6,8 @@
 	"module": "src/server.js",
 	"repository": "https://github.com/KrishnaMoorthy12/the-secret-store-api",
 	"requiredVariables": [
-		"SECRET_KEY",
+		"JWT_AUTH_SECRET",
+		"JWT_REFRESH_SECRET",
 		"SMTP_EMAIL",
 		"SMTP_PASSWORD"
 	],
@@ -29,6 +30,7 @@
 		"bcryptjs": "^2.4.3",
 		"chalk": "^4.1.1",
 		"config": "^3.3.6",
+		"cors": "^2.8.5",
 		"dotenv": "^10.0.0",
 		"express": "^4.17.1",
 		"express-async-errors": "^3.1.1",
@@ -55,6 +57,7 @@
 		"@babel/runtime": "^7.14.6",
 		"@commitlint/cli": "^13.1.0",
 		"@commitlint/config-conventional": "^13.1.0",
+		"@trivago/prettier-plugin-sort-imports": "^2.0.4",
 		"@types/jest": "^26.0.23",
 		"babel-plugin-module-resolver": "^4.1.0",
 		"eslint": "^7.30.0",

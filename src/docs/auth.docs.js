@@ -52,5 +52,21 @@ export default {
 				500: { description: 'Server error' }
 			}
 		}
+	},
+	'/auth/refresh': {
+		put: {
+			summary: 'Get new refresh-auth token pair',
+			description:
+				'Refreshes the refresh token, requires authorization header in Bearer <token> format and responds with a new JSON Web Token pair',
+			tags: ['auth'],
+			consumes: 'application/json',
+			produces: 'application/json',
+			parameters: [AuthHeader],
+			responses: {
+				200: { description: 'Refresh successful' },
+				401: { summary: 'Invalid token', description: 'Missing auth header or invalid token' },
+				500: { description: 'Server error' }
+			}
+		}
 	}
 };

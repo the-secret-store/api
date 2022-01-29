@@ -1,7 +1,10 @@
-import mongoose from 'mongoose';
-import jwt from 'jsonwebtoken';
 import { StatusCodes } from 'http-status-codes';
+import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
+
 import { User, Project, OTP } from '@models';
+
+import { validUserObject1, validUserObject2, validProject1, validTeam1 } from '../constants';
 import {
 	getOTP,
 	loginUser,
@@ -15,7 +18,6 @@ import {
 	inviteToTeam,
 	acceptInvitation
 } from '../functions';
-import { validUserObject1, validUserObject2, validProject1, validTeam1 } from '../constants';
 
 describe('Project routes (/project)', () => {
 	const server = require('../../src/server');

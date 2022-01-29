@@ -1,5 +1,5 @@
-import morgan from 'morgan';
 import chalk from 'chalk';
+import morgan from 'morgan';
 
 /**
  * Request Logging with morgan
@@ -89,6 +89,10 @@ function colorizeMethod(methodName) {
 
 		case 'DELETE':
 			colorizedMethod = chalk.red(methodName);
+			break;
+
+		case 'OPTIONS':
+			colorizedMethod = chalk.blueBright(methodName);
 			break;
 
 		default:

@@ -1,4 +1,5 @@
 import { Router } from 'express';
+
 import { TeamController } from '@controllers';
 import { authorize, teamAdminsOnly, verifiedUsersOnly } from '@middlewares';
 
@@ -17,6 +18,13 @@ router.post(
 	verifiedUsersOnly,
 	teamAdminsOnly,
 	TeamController.inviteUser
+);
+router.delete(
+	'/:teamId/delete',
+	authorize,
+	verifiedUsersOnly,
+	teamAdminsOnly,
+	TeamController.deleteTeam
 );
 
 export default router;

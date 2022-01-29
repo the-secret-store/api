@@ -1,4 +1,5 @@
 import { Router } from 'express';
+
 import { ProjectController } from '@controllers';
 import { acceptSATs, authorize, privilegedUsersOnly, verifiedUsersOnly } from '@middlewares';
 
@@ -35,6 +36,21 @@ router.patch(
 	verifiedUsersOnly,
 	privilegedUsersOnly,
 	ProjectController.addSpecialAccessToken
+);
+
+router.delete(
+	'/:projectIdOrAppId/removeSAT/:sat',
+	authorize,
+	verifiedUsersOnly,
+	privilegedUsersOnly,
+	ProjectController.removeSpecialAccessToken
+);
+
+router.delete(
+	'/:projectIdOrAppId/delete',
+	authorize,
+	verifiedUsersOnly,
+	ProjectController.deleteProject
 );
 
 export default router;

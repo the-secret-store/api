@@ -1,6 +1,8 @@
 import config from 'config';
+import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
+
 import { rateLimiter } from '@middlewares';
 
 const jsonParser = express.json();
@@ -14,6 +16,9 @@ export default function registerPreprocessor(app) {
 		app.use(helmet());
 		app.use(rateLimiter);
 	}
+
+	// todo: add production server ip
+	app.use(cors({ origin: 'http://localhost:3000' }));
 
 	app.use(jsonParser);
 }

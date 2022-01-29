@@ -1,4 +1,5 @@
 import { Router } from 'express';
+
 import { AuthController } from '@controllers';
 import { authorize } from '@middlewares';
 
@@ -12,5 +13,6 @@ const router = Router();
 
 router.post('/login', AuthController.login);
 router.get('/check', authorize, AuthController.checkAuth);
+router.put('/refresh', AuthController.getNewTokenPair);
 
 export default router;

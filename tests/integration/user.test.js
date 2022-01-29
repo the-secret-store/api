@@ -1,7 +1,9 @@
-import request from 'supertest';
-import mongoose from 'mongoose';
 import { StatusCodes } from 'http-status-codes';
+import mongoose from 'mongoose';
+import request from 'supertest';
+
 import { User } from '@models';
+
 import { validUserObject1, validUserObject2 } from '../constants';
 import { registerUser, loginUser } from '../functions';
 
